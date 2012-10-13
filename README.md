@@ -33,4 +33,4 @@ Alpha - still in development.
 
 This requires FreeBSD host or similar operating system with native ZFS support. Future versions will support Linux and BTRFS.
 
-Check out the source code and review as necessary to setup. It should be self explanatory. Better instructures will be written when this is beta status. 
+Check out the source code and review as necessary to setup. It should be self explanatory. Better instructions will be written when this is beta status. 
