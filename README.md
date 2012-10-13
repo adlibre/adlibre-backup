@@ -18,6 +18,7 @@ Utilise native ZFS (and BTRFS) filesystem snapshots, and per host filesystems fo
 * Per host backup, retention and quota policies
 * Per host configuration and logs stored with the snapshot
 * Utilise LVM snapshots for performing atomic backups of Linux systems
+* Configuration verification (test configuration and host connectivity)
 
 ### Aims
 

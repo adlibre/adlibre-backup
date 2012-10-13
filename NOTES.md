@@ -3,7 +3,7 @@
 ## Architecture
 
 * Bourne shell - fast prototyping
-* Cron will be used for scheduling
+* Cron will be used for scheduling daily runs, and rotations (ala rsnapshot) (later we should look at ways to make this more robust, so we can ensure rotations are not missed)
 * Most scripts perform single operation on a single host backup
 * 'Runner' scripts will perform global operations across multiple host backups
 
