@@ -2,6 +2,14 @@
 
 A centralised, agentless, high performance snapshot based backup system for Linux and UNIX like operating systems.
 
+#### The problem
+
+Existing Rsync backup approaches eg rsnapshot / backuppc don't scale and are hard to monitor and maintain when used with dozens or hundreds of hosts.
+
+#### Our solution
+
+Utilise native ZFS (and BTRFS) filesystem snapshots, and per host filesystems for better performance and ease of management.
+
 ###  Features
 
 * Agentless
