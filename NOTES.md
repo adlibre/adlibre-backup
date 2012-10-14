@@ -33,6 +33,8 @@ Snapshot deletion is done in a separate process independently of the backup proc
 
 Snapshots are performed on a per host basis.
 
+We can optionally keep snapshots of partial / failed backups. Maybe just prepend 'failed' to the snapshot name.
+
 ## Scheduling
 
 It is proposed that cron will be used at set to run every hour (or as frequently
