@@ -15,14 +15,14 @@ HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//)-${HOST}.pid"
 LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
 
-if [ ! $(whoami) = "andrew" ]; then
+if [ ! $(whoami) = "root" ]; then
     echo "Error: Must run as root."
     exit 99
 fi
 
 if [ ! ${HOST} ]; then
-	echo "Please specify host name as the first argument."
-	exit 99
+    echo "Please specify host name as the first argument."
+    exit 99
 fi
 
 # Check to see if we are already running / locked, limit to one instance per host
