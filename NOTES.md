@@ -24,3 +24,11 @@ In the case that a host is removed we have two options:
 
 * purge - immediately remove all files and config.
 * expire - stop future backups and expire existing backups in line with retention policy.
+
+## Snapshot / rotation
+
+Snapshots are performed immediately after a successful backup run.
+
+Snapshot deletion is done in a separate process independently of the backup processes.
+
+Snapshots are performed on a per host basis.
