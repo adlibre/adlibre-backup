@@ -28,7 +28,7 @@ Utilise native ZFS (and BTRFS) filesystem snapshots, and per host filesystems fo
 
 ### Status
 
-Alpha - still in development.
+Alpha - still in development. Not even close to being useful, let alone stable.
 
 ## Installation
 
