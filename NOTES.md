@@ -2,15 +2,15 @@
 
 ## Architecture
 
-* Bourne shell - fast prototyping
-* Cron will be used for scheduling daily runs, and rotations (ala rsnapshot) (later we should look at ways to make this more robust, so we can ensure rotations are not missed)
+* Bourne shell - fast prototyping. Later versions will be written in Python.
+* Cron will be used for scheduling daily runs, and executing rotations (ala Rsnapshot)
 * Most scripts perform single operation on a single host backup
 * 'Runner' scripts will perform global operations across multiple host backups
 
 ## Proposed Directory Structure
 
 * /backup/
-* /backup/bin/ - scripts
+* /backup/bin/ - program / scripts
 * /backup/etc/ - global config
 * /backup/hosts/ - hosts root
 * /backup/hosts/example.com/ - ZFS snapshot / filesystem 
@@ -32,3 +32,22 @@ Snapshots are performed immediately after a successful backup run.
 Snapshot deletion is done in a separate process independently of the backup processes.
 
 Snapshots are performed on a per host basis.
+
+## Scheduling
+
+It is proposed that cron will be used at set to run every hour (or as frequently
+as required for the minimal backup interval.
+
+### Backups
+
+Only if a backup job is required will a run be executed.
+
+### Snapshot expiry
+
+Snapshot expiry will be stateful and idempotent, so they will not depend on
+being run at the required rotation time. (eg as per Rsnapshot)
+
+If snapshot is not run, then snapshots will accumulate indefinitely as frequently
+as backups occur.
+
+Snapshot expiry will be run independently of the backup process.
