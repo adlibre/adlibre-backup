@@ -9,7 +9,7 @@
 # 2=warn
 # 3=error
 #
-function logMessage {
+logMessage () {
     # $1 = Error level
     # $2 = logpath
     # $3 = message 
@@ -25,7 +25,7 @@ function logMessage {
 #
 # Send passive alert information to Nagios / Icinga
 #
-function raiseAlert {
+raiseAlert () {
     # $1 - Service name that has been set up on nagios/nagiosdev server
     # $2 - Return code 0=success, 1=warning, 2=critical
     # $3 - Message you want to send
