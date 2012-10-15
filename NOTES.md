@@ -44,7 +44,7 @@ as required for the minimal backup interval.
 
 Only if a backup job is required will a run be executed.
 
-### Snapshot expiry
+### Snapshot expiry (pruning)
 
 Snapshot expiry will be stateful and idempotent, so they will not depend on
 being run at the required rotation time. (eg as per Rsnapshot)

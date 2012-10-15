@@ -5,9 +5,11 @@
 * Backup verify (eg rsync force checksum + dry run mode + verbose)
 * Decide on handling for failed backups (do we snapshot), or make a configurable option
 * Create shortcut script for adding new hosts
+* Simple backup runner
 
 ## Later
 
+* Backup runner that respects the retention interval.
 * Prototype scheduler / snapshot pruner.
 * Rewrite in Python
 
