@@ -35,9 +35,8 @@ raiseAlert () {
     NSCA_CFG=${NSCA_CFG-/etc/nagios/send_nsca.cfg}
     NSCA_PORT=${NSCA_PORT-5667}
     if [ -f ${NSCA_BIN} ]; then
-        echo "`hostname`,$1,$2,$3" | ${NSCA_BIN} -H ${NSCA_SERVER} \
+        echo "$(hostname),$1,$2,$3" | ${NSCA_BIN} -H ${NSCA_SERVER} \
         -p ${NSCA_PORT} -d "," -c ${NSCA_CFG} > /dev/null;
-        echo "Debug: Message Sent with NSCA ($NSCA_SERVER): $1 $2 $3.";
     else
         echo "Warning: NSCA Plugin not found.";
     fi

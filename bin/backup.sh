@@ -48,10 +48,10 @@ logMessage 1 $LOGFILE "Running: $RSYNC_CMD"
 $RSYNC_CMD
 
 if [ "$?" = "0" ]; then
-    raiseAlert "backup ${HOST}" 0 "Backup successful"
-    logMessage 1 $LOGFILE "Backup Succeeded"
+    raiseAlert "backup ${HOST}" 0 "Backup Successful"
+    logMessage 1 $LOGFILE "Backup Successful"
 else
-    raiseAlert "backup ${HOST}" 2 "Backup failed"
+    raiseAlert "backup ${HOST}" 2 "Backup Failed"
     logMessage 3 $LOGFILE "Backup Failed"
     exit 99
 fi
@@ -60,10 +60,10 @@ fi
 SNAP_NAME="${HOST}@$(date +"%F-%X-%s")"
 zfs snapshot $ZPOOL_NAME/hosts/${SNAP_NAME}
 if [ "$?" = "0" ]; then
-    raiseAlert "backup ${HOST}" 0 "Snapshot successful"
-    logMessage 1 $LOGFILE "Snapshot $SNAP_NAME created"
+    raiseAlert "backup ${HOST}" 0 "Snapshot Successful"
+    logMessage 1 $LOGFILE "Snapshot $SNAP_NAME Created"
 else
-    raiseAlert "backup ${HOST}" 2 "Snapshot failed"
+    raiseAlert "backup ${HOST}" 2 "Snapshot Failed"
     logMessage 3 $LOGFILE "Snapshot $SNAP_NAME Failed"
     exit 99
 fi
