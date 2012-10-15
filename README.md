@@ -24,11 +24,11 @@ Utilise native ZFS (and BTRFS) filesystem snapshots, and per host filesystems fo
 
 * Better performance and scalability than backuppc, rsnapshot etc.
 * Utilise ZFS / BTFS native filesystem features, eg snapshot, dedup, compression.
-* Native integration with monitoring tools such as Nagios and Icinga.
+* Native integration with monitoring tools such as Nagios and Icinga using NSCA passive checks.
 
 ### Status
 
-Alpha - still in development. Not even close to being useful, let alone stable.
+Alpha - still in development. Whilst the _backup.sh_ script works, the snapshot expiry and scheduler has not been developed.
 
 ## Installation
 

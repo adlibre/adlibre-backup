@@ -23,22 +23,22 @@ logMessage () {
 }
 
 #
-# Send passive alert information to Nagios / Icinga
+# Send passive check information to Nagios / Icinga using NSCA
 #
 raiseAlert () {
-    # $1 - Service name that has been set up on nagios/nagiosdev server
+    # $1 - Service name that has been set up on nsca server
     # $2 - Return code 0=success, 1=warning, 2=critical
     # $3 - Message you want to send
     # <host_name>,<svc_description>,<return_code>,<plugin_output>
     # defaults that can be overridden
-    NAGIOS_DIR=${NAGIOS_DIR-/usr/sbin/}
-    NAGIOS_CFG=${NAGIOS_CFG-/etc/nagios/}
-    NAGIOS_PORT=${NAGIOS_PORT-5667}
-    if [ -f ${NAGIOS_DIR}send_nsca ]; then
-        echo "`hostname`,$1,$2,$3" | ${NAGIOS_DIR}send_nsca -H ${NAGIOS_SERVER} \
-        -p ${NAGIOS_PORT} -d "," -c ${NAGIOS_CFG}send_nsca.cfg > /dev/null;
-        echo "Debug: Message Sent to Nagios ($NAGIOS_SERVER): $1 $2 $3.";
+    NSCA_BIN=${NSCA_BIN-/usr/sbin/send_nsca}
+    NSCA_CFG=${NSCA_CFG-/etc/nagios/send_nsca.cfg}
+    NSCA_PORT=${NSCA_PORT-5667}
+    if [ -f ${NSCA_BIN} ]; then
+        echo "`hostname`,$1,$2,$3" | ${NSCA_BIN} -H ${NSCA_SERVER} \
+        -p ${NSCA_PORT} -d "," -c ${NSCA_CFG} > /dev/null;
+        echo "Debug: Message Sent with NSCA ($NSCA_SERVER): $1 $2 $3.";
     else
-        echo "Warning: NSCA (Nagios) Plugin not found.";
+        echo "Warning: NSCA Plugin not found.";
     fi
 }
