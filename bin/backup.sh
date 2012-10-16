@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Adlibre Backup - Backup Runner
+# Adlibre Backup - Backup Single Host
 
 CWD="$(dirname $0)/"
 
