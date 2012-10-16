@@ -7,6 +7,9 @@ CWD="$(dirname $0)/"
 # Source Config
 . ${CWD}../etc/backup.conf
 
+# Source Functions
+. ${CWD}functions.sh;
+
 HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//).pid"
 LOGFILE="/${ZPOOL_NAME}/logs/backup.log"
