@@ -2,10 +2,10 @@
 
 # Adlibre Backup - Add new host
 
-CWD="`dirname $0`/";
+CWD="$(dirname $0)/"
 
 # Source Config
-. ${CWD}../etc/fasttrack.conf;
+. ${CWD}../etc/backup.conf
 
 # Source Functions
 . ${CWD}functions.sh;
