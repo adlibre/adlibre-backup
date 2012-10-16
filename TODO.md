@@ -8,6 +8,7 @@
 * Config verify mode (rsync dry run)
 * Backup verify (eg rsync force checksum + dry run mode + verbose)
 * Collect timings (time taken) for each backup and pass this to nrpe as part of check result.
+* Annotation feature (for one off backups) - eg. so you can do run a backup before and after an upgrade and know why they were taken
 
 ## Later
 
