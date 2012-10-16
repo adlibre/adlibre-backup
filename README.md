@@ -28,7 +28,7 @@ Utilise native ZFS (and BTRFS) filesystem snapshots, and per host filesystems fo
 
 ### Status
 
-Alpha - still in development. Whilst the _backup.sh_ script works, the snapshot expiry and scheduler has not been developed.
+Alpha (prototype) - still in development. Whilst _backup.sh_ and _backup-runner.sh_ scripts work, the snapshot expiry and scheduler have not been developed.
 
 ## Installation
 
