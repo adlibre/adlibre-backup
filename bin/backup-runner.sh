@@ -39,11 +39,12 @@ else
     HOSTS=$@
 fi
 
-logMessage 1 $LOGFILE "Info: begin backup run of hosts ${HOSTS}" 
+logMessage 1 $LOGFILE "Info: Begin backup run of hosts ${HOSTS}" 
 
 for host in $HOSTS; do
     logMessage 1 $LOGFILE "Info: Begining backup of ${host}" 
     ${CWD}backup.sh ${host}
+    logMessage 1 $LOGFILE "Info: Completed backup of ${host}" 
 done
 
 exit 0
