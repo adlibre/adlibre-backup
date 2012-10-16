@@ -1,28 +1,25 @@
 #!/bin/sh
 
+# Adlibre Backup - Add new host
+
+CWD="`dirname $0`/";
+
+# Source Config
+. ${CWD}../etc/fasttrack.conf;
+
+# Source Functions
+. ${CWD}functions.sh;
+
 HOST=$1
+LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
 
 if [ ! $HOST ]; then
 	echo "Please specify host name as the first argument."
 	exit
 fi
 
-
-# setup backup zpool, set compression, set dedupe and inherit on backup/hosts 
-# zfs create backup/hosts
-# zfs set compression=gzip backup
-# zfs set dedup=on backup
-# zfs inherit -r compression backup/hosts
-# zfs inherit -r dedup backup/hosts
-
-# zfs create backup/hosts/example.com
-# zfs snapshot backup/hosts/example.com@foo
-# zfs destroy backup/hosts/example.com@foo
-
-# zfs create backup/hosts/vz01.in.adlibre.net
-# mkdir hosts/vz01.in.adlibre.net/c
-# mkdir hosts/vz01.in.adlibre.net/d
-# mkdir hosts/vz01.in.adlibre.net/l
-# cp etc/host_default.conf hosts/vz01.in.adlibre.net/c/backup.conf
-
-
+zfs create ${ZPOOL_NAME}/hosts/${HOSTNAME}
+mkdir /${ZPOOL_NAME}/hosts/${HOSTNAME}/c
+mkdir /${ZPOOL_NAME}/hosts/${HOSTNAME}/d
+mkdir /${ZPOOL_NAME}/hosts/${HOSTNAME}/l
+cp /${ZPOOL_NAME}/etc/host_default.conf /${ZPOOL_NAME}/hosts/vz01.in.adlibre.net/c/backup.conf

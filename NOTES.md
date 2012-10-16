@@ -53,3 +53,16 @@ If snapshot is not run, then snapshots will accumulate indefinitely as frequentl
 as backups occur.
 
 Snapshot expiry will be run independently of the backup process.
+
+## ZFS Commands
+
+# setup backup zpool, set compression, set dedupe and inherit on backup/hosts 
+# zfs create backup/hosts
+# zfs set compression=gzip backup
+# zfs set dedup=on backup
+# zfs inherit -r compression backup/hosts
+# zfs inherit -r dedup backup/hosts
+
+# zfs create backup/hosts/example.com
+# zfs snapshot backup/hosts/example.com@foo
+# zfs destroy backup/hosts/example.com@foo
