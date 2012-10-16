@@ -1,17 +1,18 @@
 # To Do
 
+## Now
+
 * Better error handling (eg hostname not configured)
-* Config verify mode (rsync dry run)
-* Backup verify (eg rsync force checksum + dry run mode + verbose)
 * Decide on handling for failed backups (do we snapshot), or make a configurable option
 * Create shortcut script for adding new hosts
-* Simple backup runner
+* Config verify mode (rsync dry run)
+* Backup verify (eg rsync force checksum + dry run mode + verbose)
 
 ## Later
 
-* Backup runner that respects the retention interval.
-* Prototype scheduler / snapshot pruner.
 * Rewrite in Python
+* Prototype scheduler / snapshot pruner.
+* Backup runner that respects the retention interval.
 
 ## Much later
 
