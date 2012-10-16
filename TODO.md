@@ -7,6 +7,7 @@
 * Create shortcut script for adding new hosts
 * Config verify mode (rsync dry run)
 * Backup verify (eg rsync force checksum + dry run mode + verbose)
+* Collect timings (time taken) for each backup and pass this to nrpe as part of check result.
 
 ## Later
 
