@@ -26,10 +26,6 @@ Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesyst
 * Utilise ZFS (and later BTRFS) native filesystem features, eg snapshot, dedup and compression.
 * Integration with monitoring tools such as Nagios and Icinga using NSCA passive checks.
 
-### Status
-
-Alpha (prototype) - still under active development. Whilst _backup.sh_ and _backup-runner.sh_ scripts work, the snapshot expiry and scheduler have not been developed.
-
 ## Installation
 
 This requires FreeBSD host or similar operating system with native ZFS support. Future versions will support Linux and BTRFS.
@@ -40,7 +36,7 @@ Check out the source code and review as necessary to setup. It should be self ex
 
 ### Adding a host
 
-# ./bin/add-host.sh <hostname>
+> ./bin/add-host.sh <hostname>
 
 Then customise the config in _./hosts/<hostname>/c/backup.conf_.
 
@@ -48,8 +44,11 @@ Then customise the config in _./hosts/<hostname>/c/backup.conf_.
 
 To immediately purge the host configuration and all backup data:
 
-# zfs umount <zfs-pool-name>/hosts/<hostname>
-# zfs destroy <zfs-pool-name>/hosts/<hostname>
+> zfs umount <zfs-pool-name>/hosts/<hostname> && zfs destroy <zfs-pool-name>/hosts/<hostname>
 
 To disable future backups and allow existing backups to expire in line with the retention policy
 set _DEBUG=true_ in _./hosts/<hostname>/c/backup.conf_. This is the preferred method.
+
+## Status
+
+Alpha (prototype) - still under active development. Whilst _backup.sh_ and _backup-runner.sh_ scripts work, the snapshot expiry and scheduler have not been developed.
