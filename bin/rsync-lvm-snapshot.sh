@@ -27,7 +27,7 @@
 RSYNC_ARGS=`shift; echo "$@"`
 BACKUPPATH=`echo "${RSYNC_ARGS}" | sed 's/.* //'` # last argument
 SNAP_SIZE='1G'
-SNAP_SUFFIX='-rsync-snap'
+SNAP_SUFFIX='_rsync_snap'
 SNAP_MNT='/mnt/'
 DEBUG=false
 DEBUG_LOG="/tmp/rsync-lvm-snapshot-$$.log"
