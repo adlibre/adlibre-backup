@@ -49,16 +49,20 @@ for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do
 done
 
 # Do backup
+STARTTIME=$(date +%s)
 RSYNC_CMD="rsync ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${HOST}:'$BACKUP_PATHS' ${HOSTS_DIR}${HOST}/d/"
 logMessage 1 $LOGFILE "Running: $RSYNC_CMD"
-$RSYNC_CMD
+CMD=$($RSYNC_CMD)
+RETVAL=$?
+STOPTIME=$(date +%s)
+RUNTIME=$(expr ${STOPTIME} - ${STARTTIME})
 
-if [ "$?" = "0" ]; then
-    raiseAlert "backup ${HOST}" 0 "Backup Successful"
-    logMessage 1 $LOGFILE "Backup Successful"
+if [ "$RETVAL" = "0" ]; then
+    raiseAlert "backup ${HOST}" 0 "Backup Successful. Runtime ${RUNTIME} seconds."
+    logMessage 1 $LOGFILE "Backup Successful. Runtime ${RUNTIME} seconds."
 else
-    raiseAlert "backup ${HOST}" 2 "Backup Failed"
-    logMessage 3 $LOGFILE "Backup Failed"
+    raiseAlert "backup ${HOST}" 2 "Backup Failed: ${CMD}."
+    logMessage 3 $LOGFILE "Backup Failed: ${CMD}."
     exit 99
 fi
 
