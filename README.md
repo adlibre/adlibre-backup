@@ -12,7 +12,7 @@ Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesyst
 
 ### Aims
 
-* Better performance and scalability than other Rsync backup solutions. eg BackupPC, Rsnapshot etc.
+* High performance and scalability. (Benchmarked faster than other Rsync backup solutions. eg BackupPC, Rsnapshot etc.)
 * Simplicity: Simple text based configuration. And simple on-disk backup format.
 * Fault tolerant
 
