@@ -46,10 +46,13 @@ for host in $HOSTS; do
     if [ -d ${HOSTS_DIR}${host}/.zfs/snapshot ]; then
         SNAPSHOTS=$(find ${HOSTS_DIR}${host}/.zfs/snapshot -maxdepth 1 -mindepth 1)
         for snapshot in $SNAPSHOTS; do
-            EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)            
-            if [ $(date +%s) -gt $EXPIRY ]; then
-                logMessage 1 $LOGFILE "Info: Removing snapshot ${snapshot}."
-                zfs destroy ${snapshot}
+            if [ -f $snapshot/c/EXPIRY ]; then
+		        EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
+                if [ $(date +%s) -gt $EXPIRY ]; then
+                    logMessage 1 $LOGFILE "Info: Removing snapshot ${snapshot}."
+                    SNAPSHOT=$(basename $snapshot)                    
+                    zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
+                fi
             fi
         done
     fi
