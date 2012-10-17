@@ -24,7 +24,7 @@ Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesyst
 * Centralised configuration and management - all configuration and scheduling is done on the backup server
 * Per host backup, retention and quota policies
 * Per host configuration and logs stored with the snapshot
-* Utilise LVM snapshots for performing atomic backups of Linux systems
+* Utilise LVM snapshots for performing atomic backups of Linux systems (see _rsync-lvm-snapshot.sh_)
 * Configuration verification (test configuration and host connectivity)
 * Ad hoc annotated backups - allows for ad hoc backups with an explanation as to when or why the backup was taken
 
@@ -53,4 +53,4 @@ set _DEBUG=true_ in _./hosts/<hostname>/c/backup.conf_. This is the preferred me
 
 ## Status
 
-Alpha (prototype) - still under active development. Whilst mostly functional, this is a prototype and is evolving rapidly, so production use is not recommended.
+Alpha (prototype) - still under active development. Whilst functional, this is a prototype and is evolving rapidly, so production use is not recommended.
