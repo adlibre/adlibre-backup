@@ -27,15 +27,15 @@ else
     HOSTS=$@
 fi
 
+echo "NAME SNAPSHOT EXPIRY ANNOTATION"
 for host in $HOSTS; do
-    echo "NAME SNAPSHOT EXPIRY ANNOTATION"
     if [ -d ${HOSTS_DIR}${host}/.zfs/snapshot ]; then
         SNAPSHOTS=$(find ${HOSTS_DIR}${host}/.zfs/snapshot -maxdepth 1 -mindepth 1)
         for snapshot in $SNAPSHOTS; do
             SNAPSHOT=$(basename $snapshot)
-            EXPIRY=$(cat $snapshot/c/EXPIRY)
-            ANNOTATION=$(cat $snapshot/c/ANNOTATION)
-            echo "$HOST $SNAPSHOT $EXPIRY $ANNOTATION"
+            EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
+            ANNOTATION=$(cat $snapshot/c/ANNOTATION 2> /dev/null)
+            echo "$host $SNAPSHOT $EXPIRY \"$ANNOTATION\""
         done
     fi
 done
