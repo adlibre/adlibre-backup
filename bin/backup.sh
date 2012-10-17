@@ -55,6 +55,7 @@ for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do
 done
 
 # Do backup
+rm -f ${LOGFILE} # delete logfile from host dir before we begin.
 STARTTIME=$(date +%s)
 RSYNC_CMD="rsync ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${HOST}:'$BACKUP_PATHS' ${HOSTS_DIR}${HOST}/d/"
 logMessage 1 $LOGFILE "Running: $RSYNC_CMD"
