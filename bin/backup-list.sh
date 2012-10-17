@@ -27,7 +27,6 @@ else
     HOSTS=$@
 fi
 
-echo "NAME SNAPSHOT EXPIRY ANNOTATION"
 for host in $HOSTS; do
     if [ -d ${HOSTS_DIR}${host}/.zfs/snapshot ]; then
         SNAPSHOTS=$(find ${HOSTS_DIR}${host}/.zfs/snapshot -maxdepth 1 -mindepth 1)
