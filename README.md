@@ -12,21 +12,22 @@ Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesyst
 
 ### Aims
 
-* Better performance and scalability than BackupPC, Rsnapshot etc.
-* Utilise ZFS (and later BTRFS) native filesystem features, eg snapshot, dedup and compression.
-* Integration with monitoring tools such as Nagios and Icinga using NSCA passive checks.
+* Better performance and scalability than other Rsync backup solutions. eg BackupPC, Rsnapshot etc.
+* Simplicity: Simple text based configuration. And simple on-disk backup format.
 * Fault tolerant
 
 ###  Features
 
 * Agentless
+* Utilise ZFS (and later BTRFS) native filesystem features, eg snapshot, dedup and compression.
 * Uses [Rsync](http://en.wikipedia.org/wiki/Rsync) and [SSH](http://en.wikipedia.org/wiki/OpenSSH) for transport
+* Integration with monitoring tools such as Nagios and Icinga using NSCA passive checks.
 * Centralised configuration and management - all configuration and scheduling is done on the backup server
+* Ad hoc annotated backups - allows for ad hoc backups with an explanation as to when or why the backup was taken and per backup retention periods
 * Per host backup, retention and quota policies
 * Per host configuration and logs stored with the snapshot
 * Utilise LVM snapshots for performing atomic backups of Linux systems (see _rsync-lvm-snapshot.sh_)
 * Configuration verification (test configuration and host connectivity) (TODO)
-* Ad hoc annotated backups - allows for ad hoc backups with an explanation as to when or why the backup was taken and per backup retention periods
 
 ## Installation
 
@@ -47,10 +48,10 @@ Then customise the config in _./hosts/<hostname>/c/backup.conf_.
 
 To immediately purge the host configuration and all backup data:
 
-> zfs umount <zfs-pool-name>/hosts/<hostname> && zfs destroy <zfs-pool-name>/hosts/<hostname>
+> zfs umount zfs-pool-name/hosts/hostname && zfs destroy zfs-pool-name/hosts/hostname
 
 To disable future backups and allow existing backups to expire in line with the retention policy
-set _DEBUG=true_ in _./hosts/<hostname>/c/backup.conf_. This is the preferred method.
+set _DEBUG=true_ in _./hosts/hostname/c/backup.conf_. This is the preferred method.
 
 ## Status
 
