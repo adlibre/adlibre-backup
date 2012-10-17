@@ -2,7 +2,6 @@
 
 ## Now
 
-* Merge ./l/ and ./c/ dirs into ./v/
 * Config verify mode (rsync dry run)
 * Backup verify (eg rsync force checksum + dry run mode + verbose)
 
