@@ -13,7 +13,7 @@ Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesyst
 ###  Features
 
 * Agentless
-* Uses [Rsync](http://en.wikipedia.org/wiki/Rsync) and SSH for transport
+* Uses [Rsync](http://en.wikipedia.org/wiki/Rsync) and [SSH](http://en.wikipedia.org/wiki/OpenSSH) for transport
 * Centralised configuration and management - all configuration and scheduling is done on the backup server
 * Per host backup, retention and quota policies
 * Per host configuration and logs stored with the snapshot
@@ -35,3 +35,21 @@ Alpha (prototype) - still under active development. Whilst _backup.sh_ and _back
 This requires FreeBSD host or similar operating system with native ZFS support. Future versions will support Linux and BTRFS.
 
 Check out the source code and review as necessary to setup. It should be self explanatory. Better instructions will be written when this is beta status. 
+
+## Configuration
+
+### Adding a host
+
+# ./bin/add-host.sh <hostname>
+
+Then customise the config in _./hosts/<hostname>/c/backup.conf_.
+
+### Removing a host
+
+To immediately purge the host configuration and all backup data:
+
+# zfs umount <zfs-pool-name>/hosts/<hostname>
+# zfs destroy <zfs-pool-name>/hosts/<hostname>
+
+To disable future backups and allow existing backups to expire in line with the retention policy
+set _DEBUG=true_ in _./hosts/<hostname>/c/backup.conf_. This is the preferred method.
