@@ -2,7 +2,6 @@
 
 ## Now
 
-* Better error handling (eg hostname not configured)
 * Decide on handling for failed backups (do we snapshot), or make a configurable option
 * Config verify mode (rsync dry run)
 * Backup verify (eg rsync force checksum + dry run mode + verbose)

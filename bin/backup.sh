@@ -36,8 +36,14 @@ else
 fi
 
 # source host config
-. "${HOSTS_DIR}${HOST}/c/backup.conf"
+if [ -f  "${HOSTS_DIR}${HOST}/c/backup.conf" ]; then
+    . "${HOSTS_DIR}${HOST}/c/backup.conf"
+else
+    echo "Error: Invalid host or host config not found."
+    exit 99
+fi
 
+# expand excludes
 for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do
     RSYNC_EXCLUDES="$RSYNC_EXCLUDES --exclude=${e}"
 done
