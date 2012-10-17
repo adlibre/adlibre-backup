@@ -25,14 +25,15 @@ Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesyst
 * Per host backup, retention and quota policies
 * Per host configuration and logs stored with the snapshot
 * Utilise LVM snapshots for performing atomic backups of Linux systems (see _rsync-lvm-snapshot.sh_)
-* Configuration verification (test configuration and host connectivity)
-* Ad hoc annotated backups - allows for ad hoc backups with an explanation as to when or why the backup was taken
+* Configuration verification (test configuration and host connectivity) (TODO)
+* Ad hoc annotated backups - allows for ad hoc backups with an explanation as to when or why the backup was taken and per backup retention periods
 
 ## Installation
 
-This requires FreeBSD host or similar operating system with native ZFS support. Future versions will support Linux and BTRFS.
+This requires FreeBSD host or similar operating system with native ZFS support and a dedicated zpool for storage. Future versions will support Linux and BTRFS.
 
-Check out the source code and review as necessary to setup. It should be self explanatory. Better instructions will be written when this is beta status. 
+Check out the source code into the root of your zpool and review _./conf/backup.conf_ as necessary to setup.
+It should be self explanatory. Better instructions will be written when this is beta status. 
 
 ## Configuration
 
@@ -53,4 +54,4 @@ set _DEBUG=true_ in _./hosts/<hostname>/c/backup.conf_. This is the preferred me
 
 ## Status
 
-Alpha (prototype) - still under active development. Whilst functional, this is a prototype and is evolving rapidly, so production use is not recommended unless you're comfortable with getting your hands dirty.
+This should be considered "alpha" status. Whilst functional, this is a prototype and is evolving rapidly, so production use is not recommended unless you're comfortable with getting your hands dirty.
