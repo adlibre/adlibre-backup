@@ -16,7 +16,7 @@
 
 #
 # Limitations: 
-#  * Exclusions should work but need to check they are rooted in the snapshot point not the fs root. 
+#  * Exclusions don't currently work. Due to ordering of commands. (should be possible to get to work but need to check they are rooted in the snapshot point not the fs root.)
 #  * Multiple paths not yet supported in a single run
 #
 
@@ -46,7 +46,7 @@ function getLVMDevice() {
 
 function isLVM() {
     CMD=`getLVMDevice ${1}`
-    if [ "$CMD" = "" ]; then
+    if [ "$CMD" == "" ]; then
         # is not LVM
         exit 1;
     else
