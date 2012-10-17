@@ -43,6 +43,12 @@ else
     exit 99
 fi
 
+# Check to see if the host backup is disabled.
+if ${DISABLED}; then
+    logMessage 1 $LOGFILE "Info: ${HOST} backup disabled by config."
+    exit 0
+fi
+
 # expand excludes
 for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do
     RSYNC_EXCLUDES="$RSYNC_EXCLUDES --exclude=${e}"
