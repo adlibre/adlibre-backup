@@ -12,7 +12,7 @@ CWD="$(dirname $0)/"
 
 HOST=$1
 ANNOTATION=${2-none}
-EXPIRY=${3-$EXPIRY}
+EXPIRY=$(expr ${3-$EXPIRY} * 24 * 60 * 60 + $(date +%s)) # Convert expiry to unix epoc
 HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//)-${HOST}.pid"
 LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
