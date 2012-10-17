@@ -53,4 +53,4 @@ set _DEBUG=true_ in _./hosts/<hostname>/c/backup.conf_. This is the preferred me
 
 ## Status
 
-Alpha (prototype) - still under active development. Whilst functional, this is a prototype and is evolving rapidly, so production use is not recommended.
+Alpha (prototype) - still under active development. Whilst functional, this is a prototype and is evolving rapidly, so production use is not recommended unless you're comfortable with getting your hands dirty.
