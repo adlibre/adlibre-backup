@@ -11,6 +11,8 @@ CWD="$(dirname $0)/"
 . ${CWD}functions.sh;
 
 HOST=$1
+ANNOTATION=${2-none}
+EXPIRY=${3-$EXPIRY}
 HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//)-${HOST}.pid"
 LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
@@ -21,7 +23,7 @@ if [ ! $(whoami) = "root" ]; then
 fi
 
 if [ ! ${HOST} ]; then
-    echo "Please specify host name as the first argument."
+    echo "Usage: backup.sh <hostname> <annotation> <expiry-in-days>."
     exit 99
 fi
 
@@ -56,6 +58,9 @@ done
 
 # Do backup
 rm -f ${LOGFILE} # delete logfile from host dir before we begin.
+echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
+echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
+
 STARTTIME=$(date +%s)
 RSYNC_CMD="rsync ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${HOST}:'$BACKUP_PATHS' ${HOSTS_DIR}${HOST}/d/"
 logMessage 1 $LOGFILE "Running: $RSYNC_CMD"

@@ -19,6 +19,7 @@ Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesyst
 * Per host configuration and logs stored with the snapshot
 * Utilise LVM snapshots for performing atomic backups of Linux systems
 * Configuration verification (test configuration and host connectivity)
+* Ad hoc annotated backups - allows for ad hoc backups with an explanation as to when or why the backup was taken
 
 ### Aims
 
