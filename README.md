@@ -10,6 +10,13 @@ Existing Rsync backup approaches eg [Rsnapshot](http://www.rsnapshot.org/) / [Ba
 
 Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesystems for better performance and ease of management.
 
+### Aims
+
+* Better performance and scalability than BackupPC, Rsnapshot etc.
+* Utilise ZFS (and later BTRFS) native filesystem features, eg snapshot, dedup and compression.
+* Integration with monitoring tools such as Nagios and Icinga using NSCA passive checks.
+* Fault tolerant
+
 ###  Features
 
 * Agentless
@@ -20,12 +27,6 @@ Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesyst
 * Utilise LVM snapshots for performing atomic backups of Linux systems
 * Configuration verification (test configuration and host connectivity)
 * Ad hoc annotated backups - allows for ad hoc backups with an explanation as to when or why the backup was taken
-
-### Aims
-
-* Better performance and scalability than backuppc, rsnapshot etc.
-* Utilise ZFS (and later BTRFS) native filesystem features, eg snapshot, dedup and compression.
-* Integration with monitoring tools such as Nagios and Icinga using NSCA passive checks.
 
 ## Installation
 
@@ -52,4 +53,4 @@ set _DEBUG=true_ in _./hosts/<hostname>/c/backup.conf_. This is the preferred me
 
 ## Status
 
-Alpha (prototype) - still under active development. Whilst _backup.sh_ and _backup-runner.sh_ scripts work, the snapshot expiry and scheduler have not been developed.
+Alpha (prototype) - still under active development. Whilst mostly functional, this is a prototype and is evolving rapidly, so production use is not recommended.
