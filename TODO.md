@@ -8,8 +8,7 @@
 ## Later
 
 * Rewrite in Python
-* Prototype scheduler / snapshot pruner.
-* Backup runner that respects the retention interval.
+* Prototype backup runner that respects the retention interval / advanced snapshot pruner.
 * Decide on handling for failed backups (do we snapshot), or make a configurable option
 
 ## Much later
