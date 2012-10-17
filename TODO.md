@@ -2,6 +2,7 @@
 
 ## Now
 
+* Add predetermined expiry to backup snapshot
 * Annotation feature (for one off backups) - eg. so you can do run a backup before and after an upgrade and know why they were taken
 * Config verify mode (rsync dry run)
 * Backup verify (eg rsync force checksum + dry run mode + verbose)
