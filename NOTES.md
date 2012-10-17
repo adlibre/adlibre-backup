@@ -42,7 +42,11 @@ as required for the minimal backup interval.
 
 ### Backups
 
-Only if a backup job is required will a run be executed.
+Only if a backup job is required will a run be executed. (smart scheduler / pruner)
+
+Alternatively we will backup everytime run, and the expiry of the backup will be set at the time the backup is taken. (eg default 7 day expiry.)
+This means that monthly / quarterly / yearly backups need to be scheduled for a specific time to run. Otherwise the default expiry will apply.
+(Dumb scheduler / pruner)
 
 ### Snapshot expiry (pruning)
 
