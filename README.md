@@ -4,16 +4,16 @@ A centralised, agentless, high performance snapshot based backup system for Linu
 
 #### The problem
 
-Existing Rsync backup approaches eg rsnapshot / backuppc don't scale and are hard to monitor and maintain when used with dozens or hundreds of hosts.
+Existing Rsync backup approaches eg [Rsnapshot](http://www.rsnapshot.org/) / [BackupPC](http://backuppc.sourceforge.net/) don't scale and are hard to monitor and maintain when used with dozens or hundreds of hosts.
 
 #### Our solution
 
-Utilise native ZFS (and BTRFS) filesystem snapshots, and per host filesystems for better performance and ease of management.
+Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesystems for better performance and ease of management.
 
 ###  Features
 
 * Agentless
-* Uses Rsync and SSH for transport
+* Uses [Rsync](http://en.wikipedia.org/wiki/Rsync) and SSH for transport
 * Centralised configuration and management - all configuration and scheduling is done on the backup server
 * Per host backup, retention and quota policies
 * Per host configuration and logs stored with the snapshot
@@ -23,12 +23,12 @@ Utilise native ZFS (and BTRFS) filesystem snapshots, and per host filesystems fo
 ### Aims
 
 * Better performance and scalability than backuppc, rsnapshot etc.
-* Utilise ZFS / BTFS native filesystem features, eg snapshot, dedup, compression.
-* Native integration with monitoring tools such as Nagios and Icinga using NSCA passive checks.
+* Utilise ZFS (and later BTRFS) native filesystem features, eg snapshot, dedup and compression.
+* Integration with monitoring tools such as Nagios and Icinga using NSCA passive checks.
 
 ### Status
 
-Alpha (prototype) - still in development. Whilst _backup.sh_ and _backup-runner.sh_ scripts work, the snapshot expiry and scheduler have not been developed.
+Alpha (prototype) - still under active development. Whilst _backup.sh_ and _backup-runner.sh_ scripts work, the snapshot expiry and scheduler have not been developed.
 
 ## Installation
 
