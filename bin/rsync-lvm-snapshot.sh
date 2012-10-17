@@ -5,31 +5,32 @@
 # Andrew Cutler 2012 Adlibre Pty Ltd
 #
 
-# Install into sudo if using with non root user:
+#
+# Install via an SSH forced command. If using a non root user, then sudo is required: 
 # backup  ALL=NOPASSWD: /usr/bin/rsync, /usr/local/bin/rsync-lvm-snapshot.sh
 # Make sure requiretty is off
 #
 # Add to authorized_keys:
-# command="/usr/bin/sudo /usr/local/bin/rrsync-lvm-snapshot.sh $SSH_ORIGINAL_COMMAND" ssh-dss AAAAB....
+# command="/usr/bin/sudo /usr/local/bin/rsync-lvm-snapshot.sh $SSH_ORIGINAL_COMMAND" ssh-dss AAAAB....
 #
 
 #
 # Limitations: 
-#  * Can only backup a whole lvm device, from the root of that device. Does not support exclusions (yet)
-#  * Multiple paths not yet supported
-#  * Returns /mnt/vz-snap/... instead of /vz/ file path to Rsync 
+#  * Exclusions should work but need to check they are rooted in the snapshot point not the fs root. 
+#  * Multiple paths not yet supported in a single run
 #
-# TODO: Cleanup the /sbin/ paths.
-#
+
+# TODO: 
+#  * Make this smarter so a single backup of / will automatically snapshot all LVM mounted filesystems in the path and return the filelist to rsync
 
 # CONFIGURATION
 RSYNC_ARGS=`shift; echo "$@"`
 BACKUPPATH=`echo "${RSYNC_ARGS}" | sed 's/.* //'` # last argument
-SNAP_SIZE='8G'
-SNAP_SUFFIX='-snap'
+SNAP_SIZE='1G'
+SNAP_SUFFIX='-rsync-snap'
 SNAP_MNT='/mnt/'
 DEBUG=false
-DEBUG_LOG="/tmp/rsnapshot.log"
+DEBUG_LOG="/tmp/rsync-lvm-snapshot-$$.log"
 # END CONFIGURATION
 
 
@@ -62,7 +63,7 @@ function lvmBackup() {
     SNAP_NAME="${SRC_NAME}${SNAP_SUFFIX}"
     SNAP_MNT="${SNAP_MNT}${SNAP_NAME}"
 
-    RSYNC_ARGS="`echo ${RSYNC_ARGS} | sed 's@[ ][^ ]*$@@'` ${SNAP_MNT}" # replace last argument with our mount
+    RSYNC_ARGS="`echo ${RSYNC_ARGS} | sed 's@[ ][^ ]*$@@'` ./" # replace last argument with relative path
 
     # Pre
     sync && \
@@ -71,6 +72,7 @@ function lvmBackup() {
     mount -o ro ${SNAP_LV} ${SNAP_MNT}
 
     # backup
+    cd ${SNAP_MNT} && \
     /usr/bin/rsync ${RSYNC_ARGS}
 
     # post
@@ -80,8 +82,8 @@ function lvmBackup() {
 }
 
 function regularBackup() {
-	# backup
-	/usr/bin/rsync ${RSYNC_ARGS}
+    # backup
+    /usr/bin/rsync ${RSYNC_ARGS}
 }
 
 #
