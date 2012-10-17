@@ -44,7 +44,7 @@ else
 fi
 
 # Check to see if the host backup is disabled.
-if ${DISABLED}; then
+if [ "${DISABLED}" == "true" ];  then
     logMessage 1 $LOGFILE "Info: ${HOST} backup disabled by config."
     exit 0
 fi
