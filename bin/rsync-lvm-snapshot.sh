@@ -55,8 +55,20 @@ function isLVM() {
     fi
 }
 
+function lvmCleanup() {
+    
+    # post
+    cd / && \
+    umount ${SNAP_MNT} && \
+    lvremove -f ${SNAP_LV} 1> /dev/null && \
+    rmdir ${SNAP_MNT}
+    
+}
+
 function lvmBackup() {
 
+    trap lvmCleanup EXIT
+    
     SRC_LV=`getLVMDevice ${BACKUPPATH}`
     SRC_NAME=`basename ${SRC_LV}`
     SNAP_LV="${SRC_LV}${SNAP_SUFFIX}"
@@ -75,10 +87,6 @@ function lvmBackup() {
     cd ${SNAP_MNT} && \
     /usr/bin/rsync ${RSYNC_ARGS}
 
-    # post
-    umount ${SNAP_MNT} && \
-    lvremove -f ${SNAP_LV} 1> /dev/null && \
-    rmdir ${SNAP_MNT}
 }
 
 function regularBackup() {
