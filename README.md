@@ -8,7 +8,7 @@ Existing Rsync backup approaches eg [Rsnapshot](http://www.rsnapshot.org/) / [Ba
 
 #### Our solution
 
-Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesystems for better performance and ease of management.
+Utilise native ZFS (and later Btrfs) filesystem snapshots, and per host filesystems for better performance and ease of management.
 
 ### Aims
 
@@ -19,14 +19,14 @@ Utilise native ZFS (and later BTRFS) filesystem snapshots, and per host filesyst
 ###  Features
 
 * Agentless
-* Utilise ZFS (and later BTRFS) native filesystem features, eg snapshot, dedup and compression.
+* Utilise ZFS (and later Btrfs) native filesystem features, eg snapshot, dedup and compression.
 * Uses [Rsync](http://en.wikipedia.org/wiki/Rsync) and [SSH](http://en.wikipedia.org/wiki/OpenSSH) for transport
 * Integration with monitoring tools such as Nagios and Icinga using NSCA passive checks.
 * Centralised configuration and management - all configuration and scheduling is done on the backup server
 * Ad hoc annotated backups - allows for ad hoc backups with an explanation as to when or why the backup was taken and per backup retention periods
 * Per host backup, retention and quota policies
 * Per host configuration and logs stored with the snapshot
-* Utilise LVM snapshots for performing atomic backups of Linux systems (see _rsync-lvm-snapshot.sh_)
+* Utilise LVM snapshots for performing atomic backups of Linux systems. See [atomic.sh](https://github.com/adlibre/atomic-rsync/)
 * Configuration verification (test configuration and host connectivity) (TODO)
 
 ## Installation
