@@ -6,9 +6,13 @@ A centralised, agentless, high performance snapshot based backup system for Linu
 
 Existing Rsync backup approaches eg [Rsnapshot](http://www.rsnapshot.org/) / [BackupPC](http://backuppc.sourceforge.net/) don't scale and are hard to monitor and maintain when used with dozens or hundreds of hosts.
 
+They also don't elegantly handly ad hoc backups.
+
 #### Our solution
 
-Utilise native ZFS (and later Btrfs) filesystem snapshots, and per host filesystems for better performance and ease of management.
+Utilises native ZFS (and later Btrfs) filesystem snapshots, and per host filesystems for better performance and ease of management.
+
+Backups can be run at anytime, with custom expiry and a short message so you know why the backup was taken.
 
 ### Aims
 
