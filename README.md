@@ -44,7 +44,7 @@ It should be self explanatory. Better instructions will be written when this is 
 
 ### Adding a host
 
-> ./bin/add-host.sh <hostname>
+``./bin/add-host.sh <hostname>``
 
 Then customise the config in _./hosts/<hostname>/c/backup.conf_.
 
@@ -52,7 +52,7 @@ Then customise the config in _./hosts/<hostname>/c/backup.conf_.
 
 To immediately purge the host configuration and all backup data:
 
-> zfs umount zfs-pool-name/hosts/hostname && zfs destroy zfs-pool-name/hosts/hostname
+``zfs umount zfs-pool-name/hosts/hostname && zfs destroy zfs-pool-name/hosts/hostname``
 
 To disable future backups and allow existing backups to expire in line with the retention policy
 set _DEBUG=true_ in _./hosts/hostname/c/backup.conf_. This is the preferred method.
