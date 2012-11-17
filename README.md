@@ -7,8 +7,8 @@ Designed with system administrators in mind.
 
 #### The problem
 
-Existing Rsync backup approaches eg [Rsnapshot](http://www.rsnapshot.org/) /
-[BackupPC](http://backuppc.sourceforge.net/) don't scale and are hard to monitor
+Existing Rsync backup approaches (eg [Rsnapshot](http://www.rsnapshot.org/) /
+[BackupPC](http://backuppc.sourceforge.net/)) don't scale and are hard to monitor
 and maintain when used with dozens or hundreds of hosts.
 
 They also don't elegantly handle ad hoc backups, nor quickly adding and removing
@@ -51,12 +51,12 @@ when or why the backup was taken and per backup retention periods
 ## Installation
 
 This requires FreeBSD host or similar operating system with native ZFS support
-and a dedicated zpool for storage. Future versions will support Linux and BTRFS.
+and a dedicated zpool for storage. Future versions will support Linux and Btrfs.
 
 Check out the source code into the root of your zpool and review
 ``./conf/backup.conf`` as necessary to set your zpool options.
 
-## Configuration
+## Usage
 
 ### Adding a host
 
@@ -97,6 +97,8 @@ To find a particular snapshot:
 
 ``./bin/list-backups.sh <hostname>``
 
+eg:
+
     backup-host# ./bin/list-backups.sh vz01.adlibre.net
     example.com 2012-10-25-23:35:19-1351168519 1352377190 "first backup"
     example.com 2012-11-04-15:40:49-1352004049 1354418267 "before acme software upgrade"
@@ -121,4 +123,5 @@ This should be considered "alpha" status. Whilst fully functional, this is a
 prototype writen in Bourne shell. Production use is not recommended unless
 you're comfortable with getting your hands dirty.
 
-It is planned that later versions will be rewritten in Python.
+It is planned that later versions will be rewritten in Python and will support
+Btrfs on Linux..
