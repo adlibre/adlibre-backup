@@ -76,8 +76,9 @@ To immediately purge the host configuration and all backup data:
 zfs destroy zfs-pool-name/hosts/<hostname>``
 
 To disable future backups and allow existing backups to expire in line with the
-retention policy set _DISABLED=true_ in ``./hosts/<hostname>/c/backup.conf``. This
-is the preferred method.
+retention policy set _DISABLED=true_ in ``./hosts/<hostname>/c/backup.conf``.
+This is the preferred method for host removal as it allows the old backups to
+naturally expire.
 
 ### Running an ad hoc backup of a single host
 
@@ -93,7 +94,7 @@ or multiple hosts
 
 ### Restoring
 
-All backups are stored on disk in plain sight. So to restore all you need to do
+All backups are stored on disk in plain sight. To restore all you need to do
 is copy (or rsync) the files from the backup pool to your host.
 
 To find a particular snapshot:
