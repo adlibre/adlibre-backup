@@ -128,4 +128,8 @@ prototype writen in Bourne shell. Production use is not recommended unless
 you're comfortable with getting your hands dirty.
 
 It is planned that later versions will be rewritten in Python and will support
-Btrfs on Linux..
+Btrfs on Linux.
+
+See [TODO](https://github.com/adlibre/adlibre-backup/blob/master/TODO.md) and
+[ISSUES](https://github.com/adlibre/adlibre-backup/blob/master/ISSUES.md) for
+outstanding issues and current bugs.
