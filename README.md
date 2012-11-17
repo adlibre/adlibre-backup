@@ -31,7 +31,7 @@ know why the backup was taken.
 solutions. eg BackupPC, Rsnapshot etc.)
 * Simplicity: Simple text based configuration. And simple files-on-disk
 backup format.
-* Aims to be a paranoid system administrators' best friend.
+* Aims to be a paranoid system administrator's best friend.
 
 ###  Features
 
@@ -50,7 +50,6 @@ when or why the backup was taken and per backup retention periods
 * Per host configuration and logs stored with the snapshot
 * Utilise LVM snapshots for performing atomic backups of Linux systems. See
 [atomic.sh](https://github.com/adlibre/atomic-rsync/)
-* Configuration verification (test configuration and host connectivity) (TODO)
 
 ## Installation
 

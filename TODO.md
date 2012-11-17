@@ -2,7 +2,7 @@
 
 These are the features that are planned for implementation.
 
-## Now
+## Soon
 
 * Config verify mode (rsync dry run)
 * Backup verify (eg rsync force checksum + dry run mode + verbose)
