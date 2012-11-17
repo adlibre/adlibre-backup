@@ -1,7 +1,7 @@
 # Adlibre Backup
 
-A centralised, agentless, high performance snapshot based backup system for
-Linux and UNIX like operating systems.
+A high performance snapshot based backup system for Linux and UNIX like
+operating systems.
 
 Designed with system administrators in mind.
 
@@ -11,13 +11,16 @@ Existing Rsync backup approaches (eg [Rsnapshot](http://www.rsnapshot.org/) /
 [BackupPC](http://backuppc.sourceforge.net/)) don't scale and are hard to monitor
 and maintain when used with dozens or hundreds of hosts.
 
-They also don't elegantly handle ad hoc backups, nor quickly adding and removing
-hosts.
+They also don't elegantly handle ad hoc backups, nor do they facilitate quickly
+adding and removing hosts.
 
 #### Our solution
 
+Our solution is centralised and agentless, so there is nothing to consume
+resources on your hosts, and all configuration is managed on the backup server.
+
 Utilises native ZFS (and later Btrfs) filesystem snapshots, and per host
-filesystems for better performance and ease of management.
+filesystems for better performance, scalability and ease of management.
 
 Backups can be run at anytime, with custom expiry and a short message so you
 know why the backup was taken.
@@ -26,8 +29,9 @@ know why the backup was taken.
 
 * High performance and scalability. (Benchmarked faster than other Rsync backup
 solutions. eg BackupPC, Rsnapshot etc.)
-* Simplicity: Simple text based configuration. And simple on-disk backup format.
-* Fault tolerant backup runner
+* Simplicity: Simple text based configuration. And simple files-on-disk
+backup format.
+* Aims to be a paranoid system administrators' best friend.
 
 ###  Features
 
@@ -62,7 +66,7 @@ Check out the source code into the root of your zpool and review
 
 ``./bin/add-host.sh <hostname>``
 
-Then customise the per-host config in ``./hosts/<hostname>/c/backup.conf`` and
+Then customise the per host config in ``./hosts/<hostname>/c/backup.conf`` and
 ssh options in ``~/.ssh/config`` if required.
 
 ### Removing a host
