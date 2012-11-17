@@ -76,7 +76,7 @@ To immediately purge the host configuration and all backup data:
 zfs destroy zfs-pool-name/hosts/<hostname>``
 
 To disable future backups and allow existing backups to expire in line with the
-retention policy set _DEBUG=true_ in ``./hosts/<hostname>/c/backup.conf``. This
+retention policy set _DISABLED=true_ in ``./hosts/<hostname>/c/backup.conf``. This
 is the preferred method.
 
 ### Running an ad hoc backup of a single host
