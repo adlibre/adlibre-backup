@@ -74,7 +74,7 @@ if [ "$RETVAL" = "0" ]; then
     logMessage 1 $LOGFILE "Backup Successful. Runtime ${RUNTIME} seconds."
 else
     raiseAlert "backup ${HOST}" 2 "Backup Failed: ${CMD}."
-    logMessage 3 $LOGFILE "Backup Failed: ${CMD}."
+    logMessage 3 $LOGFILE "Backup Failed: ${CMD}. Rsync exited with ${RETVAL}."
     exit 99
 fi
 
