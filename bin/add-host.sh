@@ -17,6 +17,10 @@ if [ ! $HOST ]; then
 	exit
 fi
 
+if [ ! -d "/${ZPOOL_NAME}/hosts/" ]; then
+    zfs create ${ZPOOL_NAME}/hosts
+fi
+
 zfs create ${ZPOOL_NAME}/hosts/${HOST}
 mkdir /${ZPOOL_NAME}/hosts/${HOST}/c
 mkdir /${ZPOOL_NAME}/hosts/${HOST}/d
