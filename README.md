@@ -19,7 +19,7 @@ adding and removing hosts.
 Our solution is centralised and agentless, so there is nothing to consume
 resources on your hosts, and all configuration is managed on the backup server.
 
-Utilises native ZFS (and later Btrfs) filesystem snapshots, and per host
+Utilises ZFS (and later Btrfs) native filesystem snapshots, and per host
 filesystems for better performance, scalability and ease of management.
 
 Backups can be run at anytime, with custom expiry and a short message so you
@@ -53,11 +53,42 @@ when or why the backup was taken and per backup retention periods
 
 ## Installation
 
-This requires FreeBSD host or similar operating system with native ZFS support
-and a dedicated zpool for storage. Future versions will support Linux and Btrfs.
+Adlibre Backup requires an operating system with ZFS support (eg
+[FreeBSD](http://www.freebsd.org) or [ZFS on Linux](http://zfsonlinux.org/)
+and a dedicated zpool for backup storage. Future versions may support Linux
+Btrfs.
 
-Check out the source code into the root of your zpool and review
+Check out the source code into the root of your backup zpool and review
 ``./conf/backup.conf`` as necessary to set your zpool options.
+
+### Red Hat / CentOS / EL Installation and Usage Example
+
+Create _backup_ zpool with dedup and compression.
+
+    zpool create -f backup vdb
+    zpool set dedup=on backup
+    zfs set compression=gzip backup
+
+Install Adlibre Backup into root of _backup_ zpool.
+
+    yum -y install git
+    cd /backup && git clone git://github.com/adlibre/adlibre-backup.git .
+
+Generate SSH Key
+
+    ssh-keygen -t dsa -N "" -f ~/.ssh/id_dsa
+    
+Add _server.example.com_ host
+
+    cd /backup && ./bin/add-host.sh server.example.com
+        
+Copy SSH Key to host
+
+    ssh-copy-id -i ~/.ssh/id_dsa.pub root@server.example.com
+
+Run backup
+
+    ./bin/backup-runner.sh --all
 
 ## Usage
 
