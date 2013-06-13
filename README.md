@@ -74,21 +74,23 @@ Install Adlibre Backup into root of _backup_ zpool.
     yum -y install git
     cd /backup && git clone git://github.com/adlibre/adlibre-backup.git .
 
-Generate SSH Key
+Generate SSH Key, this is used for authentication.
 
     ssh-keygen -t dsa -N "" -f ~/.ssh/id_dsa
     
-Add _server.example.com_ host
+Add _server.example.com_ host config
 
-    cd /backup && ./bin/add-host.sh server.example.com
+    cd /backup && ./bin/add-host.sh example.com
         
 Copy SSH Key to host
 
-    ssh-copy-id -i ~/.ssh/id_dsa.pub root@server.example.com
+    ssh-copy-id -i ~/.ssh/id_dsa.pub root@example.com
 
 Run backup
 
     ./bin/backup-runner.sh --all
+    
+That's it.
 
 ## Usage
 
@@ -134,7 +136,7 @@ To find a particular snapshot:
 
 eg:
 
-    backup-host# ./bin/list-backups.sh vz01.adlibre.net
+    backup-host# ./bin/list-backups.sh example.com
     example.com 2012-10-25-23:35:19-1351168519 1352377190 "first backup"
     example.com 2012-11-04-15:40:49-1352004049 1354418267 "before acme software upgrade"
 
