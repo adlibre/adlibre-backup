@@ -89,7 +89,19 @@ Copy SSH Key to host
 Run backup
 
     ./bin/backup-runner.sh --all
-    
+
+The output
+
+    [root@zbackup backup]# ./bin/backup-runner.sh --all
+    Info: Begin backup run of hosts example.com
+    Info: Begining backup of example.com
+    Running: rsync -a --numeric-ids --hard-links --compress --delete-after --delete-excluded --fuzzy --exclude=/dev --exclude=/proc --exclude=/sys --exclude=/tmp --exclude=/var/tmp --exclude=/var/run --exclude=/selinux --exclude=/cgroups --exclude=lost+found root@example.com:'/' /backup/hosts/example.com/d/
+    Warning: NSCA Plugin not found.
+    Backup Successful. Runtime 1757 seconds.
+    Warning: NSCA Plugin not found.
+    Snapshot example.com@2013-06-14-15:12:39-1371186759 Created
+    Info: Completed backup of example.com
+
 That's it.
 
 ## Usage
