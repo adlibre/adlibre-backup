@@ -73,6 +73,10 @@ Install Adlibre Backup into root of _backup_ zpool.
 
     yum -y install git
     cd /backup && git clone git://github.com/adlibre/adlibre-backup.git .
+    
+Install NSCA Client (optional) for Nagios / Icinga integration
+
+    yum -y install nsca-client
 
 Generate SSH Key, this is used for authentication.
 
