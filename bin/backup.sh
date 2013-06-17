@@ -12,7 +12,6 @@ CWD="$(dirname $0)/"
 
 HOST=$1
 ANNOTATION=${2-none}
-EXPIRY=$(expr ${3-$EXPIRY} \* 24 \* 60 \* 60 + `date +%s`) # Convert expiry to unix epoc
 HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//)-${HOST}.pid"
 LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
@@ -44,6 +43,9 @@ else
     echo "Error: Invalid host or host config not found."
     exit 99
 fi
+
+# Options Overridable by backup.conf (or command line)
+EXPIRY=$(expr ${3-$EXPIRY} \* 24 \* 60 \* 60 + `date +%s`) # Convert expiry to unix epoc
 
 # Check to see if the host backup is disabled.
 if [ "${DISABLED}" == "true" ];  then
