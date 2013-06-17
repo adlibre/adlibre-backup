@@ -29,13 +29,14 @@ raiseAlert () {
     # $1 - Service name that has been set up on nsca server
     # $2 - Return code 0=success, 1=warning, 2=critical
     # $3 - Message you want to send
+    # $4 - Optional hostname
     # <host_name>,<svc_description>,<return_code>,<plugin_output>
     # defaults that can be overridden
     NSCA_BIN=${NSCA_BIN-/usr/sbin/send_nsca}
     NSCA_CFG=${NSCA_CFG-/etc/nagios/send_nsca.cfg}
     NSCA_PORT=${NSCA_PORT-5667}
     if [ -f ${NSCA_BIN} ]; then
-        echo "$(hostname),$1,$2,$3" | ${NSCA_BIN} -H ${NSCA_SERVER} \
+        echo "${4-$(hostname)},$1,$2,$3" | ${NSCA_BIN} -H ${NSCA_SERVER} \
         -p ${NSCA_PORT} -d "," -c ${NSCA_CFG} > /dev/null;
     else
         echo "Warning: NSCA Plugin not found.";
