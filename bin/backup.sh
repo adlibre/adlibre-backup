@@ -57,6 +57,7 @@ for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do
 done
 
 # Do backup
+(
 rm -f ${LOGFILE} # delete logfile from host dir before we begin.
 echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
 echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
@@ -70,24 +71,25 @@ STOPTIME=$(date +%s)
 RUNTIME=$(expr ${STOPTIME} - ${STARTTIME})
 
 if [ "$RETVAL" = "0" ]; then
-    raiseAlert "backup ${HOST}" 0 "Backup Successful. Runtime ${RUNTIME} seconds."
-    logMessage 1 $LOGFILE "Backup Successful. Runtime ${RUNTIME} seconds."
+    # Create snapshot
+    SNAP_NAME="${HOST}@$(date +"%F-%X-%s")"
+    zfs snapshot $ZPOOL_NAME/hosts/${SNAP_NAME}
+    if [ "$?" = "0" ]; then
+        raiseAlert "backup ${HOST}" 0 "Backup Successful. Runtime ${RUNTIME} seconds."
+        raiseAlert "${ANNOTATION}" 0 "Backup Successful. Runtime ${RUNTIME} seconds." ${HOST}
+        logMessage 1 $LOGFILE "Backup Successful. Runtime ${RUNTIME} seconds."
+    else
+        raiseAlert "backup ${HOST}" 2 "Snapshot Failed"
+        logMessage 3 $LOGFILE "Snapshot $SNAP_NAME Failed"
+        exit 99
+    fi
 else
     raiseAlert "backup ${HOST}" 2 "Backup Failed: ${CMD}."
+    raiseAlert "${ANNOTATION}" 2 "Backup Failed: ${CMD}." ${HOST}
     logMessage 3 $LOGFILE "Backup Failed: ${CMD}. Rsync exited with ${RETVAL}."
     exit 99
 fi
 
-# Create snapshot
-SNAP_NAME="${HOST}@$(date +"%F-%X-%s")"
-zfs snapshot $ZPOOL_NAME/hosts/${SNAP_NAME}
-if [ "$?" = "0" ]; then
-    raiseAlert "backup ${HOST}" 0 "Snapshot Successful"
-    logMessage 1 $LOGFILE "Snapshot $SNAP_NAME Created"
-else
-    raiseAlert "backup ${HOST}" 2 "Snapshot Failed"
-    logMessage 3 $LOGFILE "Snapshot $SNAP_NAME Failed"
-    exit 99
-fi
+) 2>&1 1>> ${LOGFILE} | tee -a ${LOGFILE} # stderr to console, stdout&stderr to logfile
 
 exit 0
