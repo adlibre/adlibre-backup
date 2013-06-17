@@ -14,7 +14,7 @@ CWD="$(dirname $0)/"
 
 HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//).pid"
-LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
+LOGFILE="/${ZPOOL_NAME}/logs/backup.log"
 
 if [ ! $(whoami) = "root" ]; then
     echo "Error: Must run as root."
