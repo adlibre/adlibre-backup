@@ -168,7 +168,7 @@ The files are stored plainly within the ZFS snapshot:
 Just dive in and copy the files out of the snapshot:
     
     cd /backup/hosts/example.com/.zfs/snapshot/ && \
-    rsync -aH --numeric-ids 2012-11-04-15:40:49-1352004049/ example.com:/restore-point/
+    rsync -aH --numeric-ids 2012-11-04-15:40:49-1352004049/d/ example.com:/restore-point/
 
 ## Status
 
