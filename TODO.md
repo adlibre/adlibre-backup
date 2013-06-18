@@ -4,6 +4,7 @@ These are the features that are planned for implementation.
 
 ## Soon
 
+* Develop backup auto snapshoting to provide support for weekly / monthly / yearly style retention schemes 
 * Config verify mode (rsync dry run)
 * Backup verify (eg rsync force checksum + dry run mode + verbose)
 * Fault tolerant backup runner
