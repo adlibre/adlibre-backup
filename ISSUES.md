@@ -4,4 +4,3 @@
 rsync command.
 * Lockfile removal on improper termination does not work with Bourne shell (is
 our implementation Bash specific?).
-* Master log file does not capture per host backup output
