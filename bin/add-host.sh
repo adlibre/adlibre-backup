@@ -17,12 +17,22 @@ if [ ! $HOST ]; then
 	exit
 fi
 
+# Create hosts subvolume
 if [ ! -d "/${ZPOOL_NAME}/hosts/" ]; then
     zfs create ${ZPOOL_NAME}/hosts
 fi
 
-zfs create ${ZPOOL_NAME}/hosts/${HOST}
-mkdir /${ZPOOL_NAME}/hosts/${HOST}/c
-mkdir /${ZPOOL_NAME}/hosts/${HOST}/d
-mkdir /${ZPOOL_NAME}/hosts/${HOST}/l
-cp /${ZPOOL_NAME}/etc/host_default.conf /${ZPOOL_NAME}/hosts/${HOST}/c/backup.conf
+# Create host subvolume
+if [ ! -d "/${ZPOOL_NAME}/hosts/${HOST}" ]; then
+    zfs create ${ZPOOL_NAME}/hosts/${HOST}
+    mkdir /${ZPOOL_NAME}/hosts/${HOST}/c
+    mkdir /${ZPOOL_NAME}/hosts/${HOST}/d
+    mkdir /${ZPOOL_NAME}/hosts/${HOST}/l
+    cp /${ZPOOL_NAME}/etc/host_default.conf /${ZPOOL_NAME}/hosts/${HOST}/c/backup.conf
+else
+    echo "Error: Host already exists."
+    exit 99
+fi
+
+# Try to copy ssh-key to host
+ssh-copy-id -i ${SSH_KEY} ${HOST}
