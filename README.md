@@ -80,17 +80,13 @@ Install NSCA Client (optional) for Nagios / Icinga integration
 
 Generate SSH Key, this is used for authentication.
 
-    ssh-keygen -t dsa -N "" -f ~/.ssh/id_dsa
+    ssh-keygen -t dsa -N "" -f ~root/.ssh/id_dsa
     
-Add _server.example.com_ host config
+Add _server.example.com_ host config and copy the SSH Key to host example.com
 
     cd /backup && ./bin/add-host.sh example.com
-        
-Copy SSH Key to host
-
-    ssh-copy-id -i ~/.ssh/id_dsa.pub root@example.com
-
-Run backup
+    
+Now run the backup
 
     ./bin/backup-runner.sh --all
 
@@ -174,11 +170,9 @@ Just dive in and copy the files out of the snapshot:
 
 This should be considered "alpha" status. Whilst fully functional, this is a
 prototype writen in Bourne shell. Production use is not recommended unless
-you're comfortable with getting your hands dirty.
+you're comfortable with a few rough edges.
 
 It is planned that later versions will be rewritten in Python and will support
 Btrfs on Linux.
 
-See [TODO](https://github.com/adlibre/adlibre-backup/blob/master/TODO.md) and
-[ISSUES](https://github.com/adlibre/adlibre-backup/blob/master/ISSUES.md) for
-outstanding issues and current bugs.
+See [TODO](TODO.md) and [ISSUES](ISSUES.md) for outstanding issues and current bugs.
