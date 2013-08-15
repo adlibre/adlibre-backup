@@ -180,3 +180,4 @@ It is planned that later versions will be rewritten in Python and will support
 Btrfs on Linux.
 
 See [TODO](TODO.md) and [ISSUES](ISSUES.md) for outstanding issues and current bugs.
+And [NOTES](NOTES.md) for development information.
