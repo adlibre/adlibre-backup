@@ -66,7 +66,7 @@ Check out the source code into the root of your backup zpool and review
 Create _backup_ zpool with dedup and compression.
 
     zpool create -f backup vdb
-    zpool set dedup=on backup
+    zfs set dedup=on backup
     zfs set compression=gzip backup
 
 Install Adlibre Backup into root of _backup_ zpool.
