@@ -173,9 +173,8 @@ Just dive in and copy the files out of the snapshot:
 
 ## Status
 
-This should be considered "alpha" status. Whilst fully functional, this is a
-prototype writen in Bourne shell. Production use is not recommended unless
-you're comfortable with a few rough edges.
+This should be considered "beta" status. Whilst fully functional, there are
+still a few rough edges.
 
 It is planned that later versions will be rewritten in Python and will support
 Btrfs on Linux.
