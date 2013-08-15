@@ -104,6 +104,11 @@ The output
 
 That's it.
 
+Now if you want to schedule daily backups Add the following to your root crontab:
+
+    PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+    @daily /backup/bin/backup-runner.sh --all --comment "Backup Daily" && /backup/bin/prune.sh --all
+
 ## Usage
 
 ### Adding a host
