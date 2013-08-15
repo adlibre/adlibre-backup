@@ -1,13 +1,15 @@
 # Development Notes
 
+Development notes for the current Bourne shell implementation.
+
 ## Architecture
 
 * Bourne shell - fast prototyping. Later versions will be written in Python.
-* Cron will be used for scheduling daily runs, and executing rotations (ala Rsnapshot)
-* Most scripts perform single operation on a single host backup
-* 'Runner' scripts will perform global operations across multiple host backups
+* Cron is used for scheduling daily runs, and executing rotations (ala Rsnapshot)
+* Most scripts perform a single operation on a single host backup
+* 'Runner' scripts perform global operations across multiple host backups
 
-## Proposed Directory Structure
+## Directory Structure
 
 * /backup/
 * /backup/bin/ - program / scripts
@@ -33,32 +35,24 @@ Snapshot deletion is done in a separate process independently of the backup proc
 
 Snapshots are performed on a per host basis.
 
-We can optionally keep snapshots of partial / failed backups. Maybe just prepend 'failed' to the snapshot name.
+Partial / failed backups update the current host backup pool, but are not snapshotted. 
 
 ## Scheduling
 
-It is proposed that cron will be used at set to run every hour (or as frequently
-as required for the minimal backup interval.
-
-### Backups
-
-Only if a backup job is required will a run be executed. (smart scheduler / pruner)
-
-Alternatively we will backup everytime run, and the expiry of the backup will be set at the time the backup is taken. (eg default 7 day expiry.)
-This means that monthly / quarterly / yearly backups need to be scheduled for a specific time to run. Otherwise the default expiry will apply.
-(Dumb scheduler / pruner)
+Cron is used to schedule the backup runner. I can be be set to run every hour
+or as frequently as required for the minimal backup interval.
 
 ### Snapshot expiry (pruning)
 
-Snapshot expiry will be stateful and idempotent, so they will not depend on
+Snapshot expiry is stateful and idempotent. It does not depend on
 being run at the required rotation time. (eg as per Rsnapshot)
 
 If snapshot is not run, then snapshots will accumulate indefinitely as frequently
 as backups occur.
 
-Snapshot expiry will be run independently of the backup process.
+Snapshot expiry is run independently of the backup process.
 
-## ZFS Commands
+## ZFS Commands (cheat sheet)
 
 # setup backup zpool, set compression, set dedupe and inherit on backup/hosts 
 # zfs create backup/hosts
