@@ -39,6 +39,9 @@ fi
 # source host config
 if [ -f  "${HOSTS_DIR}${HOST}/c/backup.conf" ]; then
     . "${HOSTS_DIR}${HOST}/c/backup.conf"
+    # Check Sanity of Config (unified with global config)
+    command -v $RSYNC_BIN > /dev/null || echo "rsync not found. Please specify \$RSYNC_BIN location in backup.conf."
+    command -v $NSCA_BIN > /dev/null || echo "send_nsca not found. Please specify \$NSCA_BIN location in backup.conf."
 else
     echo "Error: Invalid host or host config not found."
     exit 99
@@ -65,7 +68,7 @@ echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
 echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
 
 STARTTIME=$(date +%s)
-RSYNC_CMD="rsync ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${HOST}:'$BACKUP_PATHS' ${HOSTS_DIR}${HOST}/d/"
+RSYNC_CMD="${RSYNC_BIN} ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${HOST}:'$BACKUP_PATHS' ${HOSTS_DIR}${HOST}/d/"
 logMessage 1 $LOGFILE "Running: $RSYNC_CMD"
 CMD=$($RSYNC_CMD)
 RETVAL=$?
