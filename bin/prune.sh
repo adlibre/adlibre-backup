@@ -15,6 +15,7 @@ CWD="$(dirname $0)/"
 HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//).pid"
 LOGFILE="/${ZPOOL_NAME}/logs/backup.log"
+DRYRUN=
 
 if [ ! $(whoami) = "root" ]; then
     echo "Error: Must run as root."
@@ -25,6 +26,10 @@ while test $# -gt 0; do
     case "$1" in
 	--all | -a)
 	    HOSTS=$(ls ${HOSTS_DIR})
+	    shift
+	    ;;
+	--dry-run | -n)
+	    DRYRUN="Dry run:"
 	    shift
 	    ;;
 	--)		# Stop option processing.
@@ -66,8 +71,12 @@ for host in $HOSTS; do
                 EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
                 if [ $(date +%s) -gt $EXPIRY ]; then
                     logMessage 1 $LOGFILE "Info: Removing snapshot ${snapshot}."
-                    SNAPSHOT=$(basename $snapshot)                    
-                    zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
+                    SNAPSHOT=$(basename $snapshot)
+                    if [ -n "$DRYRUN" ] ; then
+                        echo $DRYRUN zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
+                    else
+                        zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
+                    fi
                 fi
             fi
         done
