@@ -30,6 +30,7 @@ while test $# -gt 0; do
 	    ;;
 	--dry-run | -n)
 	    DRYRUN="Dry run:"
+	    LOGFILE=/dev/stderr
 	    shift
 	    ;;
 	--)		# Stop option processing.
