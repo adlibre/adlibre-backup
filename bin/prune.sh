@@ -71,7 +71,7 @@ for host in $HOSTS; do
             if [ -f $snapshot/c/EXPIRY ]; then
                 EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
                 if [ $(date +%s) -gt $EXPIRY ]; then
-                    logMessage 1 $LOGFILE "Info: Removing snapshot ${snapshot}."
+                    logMessage 1 $LOGFILE "$DRYRUN Removing snapshot ${snapshot}."
                     SNAPSHOT=$(basename $snapshot)
                     if [ -n "$DRYRUN" ] ; then
                         echo $DRYRUN zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
