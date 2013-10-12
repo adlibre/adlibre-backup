@@ -15,19 +15,41 @@ CWD="$(dirname $0)/"
 HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//).pid"
 LOGFILE="/${ZPOOL_NAME}/logs/backup.log"
+DRYRUN=
 
 if [ ! $(whoami) = "root" ]; then
     echo "Error: Must run as root."
     exit 99
 fi
 
-if [ "$1" == '--all' ]; then
-    HOSTS=$(ls ${HOSTS_DIR})
-elif
-    [ "$1" == '' ]; then
+while test $# -gt 0; do
+    case "$1" in
+	--all | -a)
+	    HOSTS=$(ls ${HOSTS_DIR})
+	    shift
+	    ;;
+	--dry-run | -n)
+	    DRYRUN="Dry run:"
+	    LOGFILE=/dev/stderr
+	    shift
+	    ;;
+	--)		# Stop option processing.
+	    shift; break
+	    ;;
+	-*)
+	    echo >&2 "$0: unrecognized option \`$1'"
+	    exit 99
+	    ;;
+	*)
+	    break
+	    ;;
+    esac
+done
+
+if [ -z "$HOSTS" -a "x$1" = "x" ] ; then
     echo "Please specify host or hostnames name as the arguments, or --all."
     exit 99
-else
+elif [ -z "$HOSTS" ] ; then
     HOSTS=$@
 fi
 
@@ -49,9 +71,13 @@ for host in $HOSTS; do
             if [ -f $snapshot/c/EXPIRY ]; then
                 EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
                 if [ $(date +%s) -gt $EXPIRY ]; then
-                    logMessage 1 $LOGFILE "Info: Removing snapshot ${snapshot}."
-                    SNAPSHOT=$(basename $snapshot)                    
-                    zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
+                    logMessage 1 $LOGFILE "$DRYRUN Removing snapshot ${snapshot}."
+                    SNAPSHOT=$(basename $snapshot)
+                    if [ -n "$DRYRUN" ] ; then
+                        echo $DRYRUN zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
+                    else
+                        zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
+                    fi
                 fi
             fi
         done
