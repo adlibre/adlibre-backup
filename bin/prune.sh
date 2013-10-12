@@ -21,13 +21,29 @@ if [ ! $(whoami) = "root" ]; then
     exit 99
 fi
 
-if [ "$1" == '--all' ]; then
-    HOSTS=$(ls ${HOSTS_DIR})
-elif
-    [ "$1" == '' ]; then
+while test $# -gt 0; do
+    case "$1" in
+	--all | -a)
+	    HOSTS=$(ls ${HOSTS_DIR})
+	    shift
+	    ;;
+	--)		# Stop option processing.
+	    shift; break
+	    ;;
+	-*)
+	    echo >&2 "$0: unrecognized option \`$1'"
+	    exit 99
+	    ;;
+	*)
+	    break
+	    ;;
+    esac
+done
+
+if [ -z "$HOSTS" -a "x$1" = "x" ] ; then
     echo "Please specify host or hostnames name as the arguments, or --all."
     exit 99
-else
+elif [ -z "$HOSTS" ] ; then
     HOSTS=$@
 fi
 
