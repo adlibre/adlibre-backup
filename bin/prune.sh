@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Adlibre Backup - Filesystem Snapshotter
+# Adlibre Backup - Snapshot Pruner
 
 # Manages snapshots in line with retention policy.
 
@@ -24,30 +24,32 @@ fi
 
 while test $# -gt 0; do
     case "$1" in
-	--all | -a)
-	    HOSTS=$(ls ${HOSTS_DIR})
-	    shift
-	    ;;
-	--dry-run | -n)
-	    DRYRUN="Dry run:"
-	    LOGFILE=/dev/stderr
-	    shift
-	    ;;
-	--)		# Stop option processing.
-	    shift; break
-	    ;;
-	-*)
-	    echo >&2 "$0: unrecognized option \`$1'"
-	    exit 99
-	    ;;
-	*)
-	    break
-	    ;;
+    --all | -a)
+        HOSTS=$(ls ${HOSTS_DIR})
+        shift
+        ;;
+    --dry-run | -n)
+        echo "Initiating dry run."
+        DRYRUN="Dry run:"
+        LOGFILE=/dev/stderr
+        shift
+        ;;
+    --)	# Stop option processing.
+        shift; break
+        ;;
+    -*)
+        echo >&2 "$0: unrecognized option \`$1'"
+        exit 99
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 
-if [ -z "$HOSTS" -a "x$1" = "x" ] ; then
+if [ -z "$HOSTS" -a "$1" == "" ] ; then
     echo "Please specify host or hostnames name as the arguments, or --all."
+    echo "usage: `basename $0` [ --dry-run | -n ] [ --all | hostname ... ]"
     exit 99
 elif [ -z "$HOSTS" ] ; then
     HOSTS=$@
@@ -71,7 +73,7 @@ for host in $HOSTS; do
             if [ -f $snapshot/c/EXPIRY ]; then
                 EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
                 if [ $(date +%s) -gt $EXPIRY ]; then
-                    logMessage 1 $LOGFILE "$DRYRUN Removing snapshot ${snapshot}."
+                    logMessage 1 $LOGFILE "Info: Removing snapshot ${snapshot}."
                     SNAPSHOT=$(basename $snapshot)
                     if [ -n "$DRYRUN" ] ; then
                         echo $DRYRUN zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
@@ -81,6 +83,8 @@ for host in $HOSTS; do
                 fi
             fi
         done
+    else
+        logMessage 2 $LOGFILE "Warning: Host not found."
     fi
 done
 
