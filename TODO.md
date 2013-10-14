@@ -1,6 +1,6 @@
 # To Do
 
-These are the features that are planned for implementation.
+These are some features that are planned for implementation.
 
 ## Soon
 
@@ -8,7 +8,7 @@ These are the features that are planned for implementation.
 * Config verify mode (rsync dry run)
 * Backup verify (eg rsync force checksum + dry run mode + verbose)
 * Fault tolerant backup runner
-* ad hoc emails should (optionally) emit an email on completion
+* ad hoc backups should (optionally) emit an email on completion
 * nohup should be used for ad hoc backups so they are not accidentally
 terminated when run interactively.
 
@@ -19,6 +19,7 @@ terminated when run interactively.
 snapshot pruner.
 * Decide on handling for failed backups (do we snapshot), or make a configurable
 option
+* Make NSCA notifications optional by moving to a plugin / hook architecture
 
 ## Much later
 
