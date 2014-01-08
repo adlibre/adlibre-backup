@@ -95,10 +95,10 @@ if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
         logMessage 3 $LOGFILE "Backup succeeded, but snapshot ${SNAP_NAME} Failed"
         exit 99
     elif [ "$RSYNC_RETVAL" != "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ] && [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
-        # Downgrade rsync failure error to warning (because SNAPSHOT_ON_ERROR=true)
+        # Downgrade rsync failure error to nagios warning (because SNAPSHOT_ON_ERROR=true)
         raiseAlert "backup ${HOST}" 1 "Backup Failed: ${CMD}. Snapshotted anyway."
         raiseAlert "${ANNOTATION}" 1 "Backup Failed: ${CMD}. Snapshotted anyway." ${HOST}
-        logMessage 2 $LOGFILE "Backup Warning: ${CMD}. Rsync exited with ${RSYNC_RETVAL}. Snapshotted anyway."
+        logMessage 3 $LOGFILE "Backup Error: ${CMD}. Rsync exited with ${RSYNC_RETVAL}. Snapshotted anyway."
         exit 99
     fi
 else
