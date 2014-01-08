@@ -71,27 +71,40 @@ STARTTIME=$(date +%s)
 RSYNC_CMD="${RSYNC_BIN} ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${HOST}:'$BACKUP_PATHS' ${HOSTS_DIR}${HOST}/d/"
 logMessage 1 $LOGFILE "Running: $RSYNC_CMD"
 CMD=$($RSYNC_CMD)
-RETVAL=$?
+RSYNC_RETVAL=$?
 STOPTIME=$(date +%s)
 RUNTIME=$(expr ${STOPTIME} - ${STARTTIME})
 
-if [ "$RETVAL" = "0" ]; then
-    # Create snapshot
-    SNAP_NAME="${HOST}@$(date +"%F-%X-%s")"
+if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
+
+    # Create snapshot    
+    if [ "$RSYNC_RETVAL" = "0" ]; then
+        SNAP_NAME="${HOST}@$(date +"%F-%X-%s")"
+    else
+        SNAP_NAME="${HOST}@$(date +"%F-%X-%s")-partial"
+    fi    
     zfs snapshot $ZPOOL_NAME/hosts/${SNAP_NAME}
-    if [ "$?" = "0" ]; then
+    SNAPSHOT_RETVAL=$?
+    
+    if [ "$RSYNC_RETVAL" = "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ]; then
         raiseAlert "backup ${HOST}" 0 "Backup Successful. Runtime ${RUNTIME} seconds."
         raiseAlert "${ANNOTATION}" 0 "Backup Successful. Runtime ${RUNTIME} seconds." ${HOST}
         logMessage 1 $LOGFILE "Backup Successful. Runtime ${RUNTIME} seconds."
-    else
-        raiseAlert "backup ${HOST}" 2 "Snapshot Failed"
-        logMessage 3 $LOGFILE "Snapshot $SNAP_NAME Failed"
+    elif [ "$RSYNC_RETVAL" = "0" ] && [ "$SNAPSHOT_RETVAL" != "0" ]; then
+        raiseAlert "backup ${HOST}" 2 "Backup succeeded, but Snapshot Failed"
+        logMessage 3 $LOGFILE "Backup succeeded, but snapshot ${SNAP_NAME} Failed"
+        exit 99
+    elif [ "$RSYNC_RETVAL" != "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ] && [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
+        # Downgrade rsync failure error to warning (because SNAPSHOT_ON_ERROR=true)
+        raiseAlert "backup ${HOST}" 1 "Backup Failed: ${CMD}. Snapshotted anyway."
+        raiseAlert "${ANNOTATION}" 1 "Backup Failed: ${CMD}. Snapshotted anyway." ${HOST}
+        logMessage 2 $LOGFILE "Backup Warning: ${CMD}. Rsync exited with ${RSYNC_RETVAL}. Snapshotted anyway."
         exit 99
     fi
 else
     raiseAlert "backup ${HOST}" 2 "Backup Failed: ${CMD}."
     raiseAlert "${ANNOTATION}" 2 "Backup Failed: ${CMD}." ${HOST}
-    logMessage 3 $LOGFILE "Backup Failed: ${CMD}. Rsync exited with ${RETVAL}."
+    logMessage 3 $LOGFILE "Backup Failed: ${CMD}. Rsync exited with ${RSYNC_RETVAL}."
     exit 99
 fi
 

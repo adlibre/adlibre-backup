@@ -31,11 +31,13 @@ In the case that a host is removed we have two options:
 
 Snapshots are performed immediately after a successful backup run.
 
-Snapshot deletion is done in a separate process independently of the backup processes.
+Snapshot deletion is done in a separate process independently of the backup
+processes (_bin/prune.sh_).
 
 Snapshots are performed on a per host basis.
 
-Partial / failed backups update the current host backup pool, but are not snapshotted. 
+Partial / failed backups update the current host backup pool, but are not snapshotted
+(unless SNAPSHOT_ON_ERROR=true). 
 
 ## Scheduling
 
