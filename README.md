@@ -173,8 +173,7 @@ Just dive in and copy the files out of the snapshot:
 
 ## Status
 
-This should be considered "beta" status. Whilst fully functional, there are
-still a few rough edges.
+This should be considered "beta" status.
 
 It is planned that later versions will be rewritten in Python and will support
 Btrfs on Linux.
