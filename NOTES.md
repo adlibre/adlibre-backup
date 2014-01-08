@@ -27,6 +27,11 @@ In the case that a host is removed we have two options:
 * purge - immediately remove all files and config.
 * expire - stop future backups and expire existing backups in line with retention policy.
 
+## Scheduling
+
+Cron is used to schedule the backup runner. It can be be set to run every hour
+or as frequently as required for the backup interval.
+
 ## Snapshot / rotation
 
 Snapshots are performed immediately after a successful backup run.
@@ -37,22 +42,13 @@ processes (_bin/prune.sh_).
 Snapshots are performed on a per host basis.
 
 Partial / failed backups update the current host backup pool, but are not snapshotted
-(unless SNAPSHOT_ON_ERROR=true). 
-
-## Scheduling
-
-Cron is used to schedule the backup runner. I can be be set to run every hour
-or as frequently as required for the minimal backup interval.
-
-### Snapshot expiry (pruning)
+(unless SNAPSHOT_ON_ERROR=true).
 
 Snapshot expiry is stateful and idempotent. It does not depend on
 being run at the required rotation time. (eg as per Rsnapshot)
 
-If snapshot is not run, then snapshots will accumulate indefinitely as frequently
+If snapshot is not pruned, then snapshots will accumulate indefinitely as frequently
 as backups occur.
-
-Snapshot expiry is run independently of the backup process.
 
 ## ZFS Commands (cheat sheet)
 
