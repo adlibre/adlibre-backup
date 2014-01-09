@@ -70,8 +70,12 @@ echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
 STARTTIME=$(date +%s)
 RSYNC_CMD="${RSYNC_BIN} ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${HOST}:'$BACKUP_PATHS' ${HOSTS_DIR}${HOST}/d/"
 logMessage 1 $LOGFILE "Running: $RSYNC_CMD"
-CMD=$($RSYNC_CMD)
+RSYNC_FILE=$($MKTEMP /tmp/adlibre.XXXXXXXX) || exit 99 # May want more logging here.
+echo $RSYNC_CMD > $RSYNC_FILE
+CMD=$(/bin/sh $RSYNC_FILE)
 RETVAL=$?
+rm $RSYNC_FILE
+
 STOPTIME=$(date +%s)
 RUNTIME=$(expr ${STOPTIME} - ${STARTTIME})
 
