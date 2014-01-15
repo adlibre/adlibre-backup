@@ -54,7 +54,7 @@ when or why the backup was taken and per backup retention periods
 ## Installation
 
 Adlibre Backup requires an operating system with ZFS support (eg
-[FreeBSD](http://www.freebsd.org) or [ZFS on Linux](http://zfsonlinux.org/)
+[FreeBSD](http://www.freebsd.org) or [ZFS on Linux](http://zfsonlinux.org/))
 and a dedicated zpool for backup storage. Future versions may support Linux
 Btrfs.
 
