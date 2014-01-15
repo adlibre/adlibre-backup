@@ -56,10 +56,8 @@ if [ "${DISABLED}" == "true" ];  then
     exit 0
 fi
 
-# expand excludes
-for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do
-    RSYNC_EXCLUDES="$RSYNC_EXCLUDES --exclude=${e}"
-done
+# expand excludes (with support for strings with escaped spaces)
+eval "for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do RSYNC_EXCLUDES=\"\$RSYNC_EXCLUDES --exclude='\${e}'\"; done"
 
 # Do backup
 (
