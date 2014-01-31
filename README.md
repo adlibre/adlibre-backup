@@ -130,6 +130,10 @@ retention policy set _DISABLED=true_ in ``./hosts/<hostname>/c/backup.conf``.
 This is the preferred method for host removal as it allows the old backups to
 naturally expire.
 
+To temporarily disable snapshot pruning for a single host, touch the
+file ``./hosts/<hostname>/NO_SNAPSHOT_PRUNING_PLEASE``.  This will
+prevent prune.sh from deleting snapshots for that host.
+
 ### Running an ad hoc backup of a single host
 
 ``./bin/backup.sh <hostname> <annotation> <expiry-in-days>``

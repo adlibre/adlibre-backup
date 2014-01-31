@@ -68,6 +68,10 @@ fi
 for host in $HOSTS; do
     logMessage 1 $LOGFILE "Info: Pruning snapshots for ${host}."
     if [ -d ${HOSTS_DIR}${host}/.zfs/snapshot ]; then
+	if [ -f ${HOSTS_DIR}${host}/NO_SNAPSHOT_PRUNING_PLEASE ] ; then
+	    echo "${HOSTS_DIR}${host}/NO_SNAPSHOT_PRUNING_PLEASE exists; refusing to prune snapshots for this host!"
+	    continue
+	fi
         SNAPSHOTS=$(find ${HOSTS_DIR}${host}/.zfs/snapshot -maxdepth 1 -mindepth 1)
         for snapshot in $SNAPSHOTS; do
             if [ -f $snapshot/c/EXPIRY ]; then
