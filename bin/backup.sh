@@ -37,15 +37,7 @@ else
 fi
 
 # source host config
-if [ -f  "${HOSTS_DIR}${HOST}/c/backup.conf" ]; then
-    . "${HOSTS_DIR}${HOST}/c/backup.conf"
-    # Check Sanity of Config (unified with global config)
-    command -v $RSYNC_BIN > /dev/null || echo "rsync not found. Please specify \$RSYNC_BIN location in backup.conf."
-    command -v $NSCA_BIN > /dev/null || echo "send_nsca not found. Please specify \$NSCA_BIN location in backup.conf."
-else
-    echo "Error: Invalid host or host config not found."
-    exit 99
-fi
+sourceHostConfig $HOSTS_DIR $HOST
 
 # Options Overridable by backup.conf (or command line)
 EXPIRY=$(expr ${3-$EXPIRY} \* 24 \* 60 \* 60 + `date +%s`) # Convert expiry to unix epoc

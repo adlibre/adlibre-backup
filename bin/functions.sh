@@ -42,3 +42,21 @@ raiseAlert () {
         echo "Warning: NSCA Plugin not found.";
     fi
 }
+
+#
+# Source host config
+#
+sourceHostConfig() {
+    
+    # $1 = HOSTS_DIR
+    # $2 = HOST
+    if [ -f  "${1}${2}/c/backup.conf" ]; then
+        . "${1}${2}/c/backup.conf"
+        # Check Sanity of Config (unified with global config)
+        command -v $RSYNC_BIN > /dev/null || echo "rsync not found. Please specify \$RSYNC_BIN location in backup.conf."
+        command -v $NSCA_BIN > /dev/null || echo "send_nsca not found. Please specify \$NSCA_BIN location in backup.conf."
+    else
+        echo "Error: Invalid host or host config not found."
+        exit 99
+    fi
+}

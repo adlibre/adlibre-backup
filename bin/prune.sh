@@ -65,10 +65,18 @@ else
     trap "{ rm -f ${LOCKFILE}; }" EXIT
 fi
 
-for host in $HOSTS; do
-    logMessage 1 $LOGFILE "Info: Pruning snapshots for ${host}."
-    if [ -d ${HOSTS_DIR}${host}/.zfs/snapshot ]; then
-        SNAPSHOTS=$(find ${HOSTS_DIR}${host}/.zfs/snapshot -maxdepth 1 -mindepth 1)
+for HOST in $HOSTS; do
+    sourceHostConfig $HOSTS_DIR $HOST
+    # Check to see if the host prune is disabled.
+    if [ "${PRUNE}" == "false" ];  then
+        logMessage 1 $LOGFILE "Info: ${HOST} prune disabled by config."
+        break
+    else
+        logMessage 1 $LOGFILE "Info: Pruning snapshots for ${HOST}."
+    fi
+    # Prune the backup
+    if [ -d ${HOSTS_DIR}${HOST}/.zfs/snapshot ]; then
+        SNAPSHOTS=$(find ${HOSTS_DIR}${HOST}/.zfs/snapshot -maxdepth 1 -mindepth 1)
         for snapshot in $SNAPSHOTS; do
             if [ -f $snapshot/c/EXPIRY ]; then
                 EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
@@ -76,9 +84,9 @@ for host in $HOSTS; do
                     logMessage 1 $LOGFILE "Info: Removing snapshot ${snapshot}."
                     SNAPSHOT=$(basename $snapshot)
                     if [ -n "$DRYRUN" ] ; then
-                        echo $DRYRUN zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
+                        echo $DRYRUN zfs destroy ${ZPOOL_NAME}/hosts/${HOST}@${SNAPSHOT}
                     else
-                        zfs destroy ${ZPOOL_NAME}/hosts/${host}@${SNAPSHOT}
+                        zfs destroy ${ZPOOL_NAME}/hosts/${HOST}@${SNAPSHOT}
                     fi
                 fi
             fi
