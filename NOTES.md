@@ -22,10 +22,11 @@ Development notes for the current Bourne shell implementation.
 
 ## How to manage adding and removing hosts
 
-In the case that a host is removed we have two options:
+In the case that a host is removed we have three options:
 
 * purge - immediately remove all files and config.
 * expire - stop future backups and expire existing backups in line with retention policy.
+* disable - disable future backups and disable backup pruning.
 
 ## Scheduling
 
