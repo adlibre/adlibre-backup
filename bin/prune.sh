@@ -16,6 +16,7 @@ HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//).pid"
 LOGFILE="/${ZPOOL_NAME}/logs/backup.log"
 DRYRUN=
+FORCE=
 
 if [ ! $(whoami) = "root" ]; then
     echo "Error: Must run as root."
@@ -34,6 +35,11 @@ while test $# -gt 0; do
         LOGFILE=/dev/stderr
         shift
         ;;
+    --force | -f)
+        echo "Forcing prune."
+        FORCE=true
+        shift
+        ;;
     --)	# Stop option processing.
         shift; break
         ;;
@@ -49,7 +55,7 @@ done
 
 if [ -z "$HOSTS" -a "$1" == "" ] ; then
     echo "Please specify host or hostnames name as the arguments, or --all."
-    echo "usage: `basename $0` [ --dry-run | -n ] [ --all | hostname ... ]"
+    echo "Usage: `basename $0` [ --dry-run | -n ] [ --force | -f ] [ --all | hostname ... ]"
     exit 99
 elif [ -z "$HOSTS" ] ; then
     HOSTS=$@
@@ -68,7 +74,7 @@ fi
 for HOST in $HOSTS; do
     sourceHostConfig $HOSTS_DIR $HOST
     # Check to see if the host prune is disabled.
-    if [ "${PRUNE}" == "false" ];  then
+    if [ "${PRUNE}" == "false" ] && [ -z "$FORCE" ];  then
         logMessage 1 $LOGFILE "Info: ${HOST} prune disabled by config."
         break
     else

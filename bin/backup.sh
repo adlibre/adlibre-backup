@@ -10,19 +10,49 @@ CWD="$(dirname $0)/"
 # Source Functions
 . ${CWD}functions.sh;
 
-HOST=$1
-ANNOTATION=${2-none}
 HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//)-${HOST}.pid"
 LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
+DRYRUN=
+FORCE=
 
 if [ ! $(whoami) = "root" ]; then
     echo "Error: Must run as root."
     exit 99
 fi
 
+while test $# -gt 0; do
+    case "$1" in
+    --dry-run | -n)
+        echo "Initiating dry run."
+        DRYRUN="Dry run:"
+        LOGFILE=/dev/stderr
+        shift
+        ;;    
+    --force | -f)
+        echo "Forcing backup."
+        FORCE=true
+        shift
+        ;;
+    --)	# Stop option processing.
+        shift; break
+        ;;
+    -*)
+        echo >&2 "$0: unrecognized option \`$1'"
+        exit 99
+        ;;
+    *)
+        break
+        ;;
+    esac
+done
+
+HOST=$1
+ANNOTATION=${2-none}
+# source host config
+
 if [ ! ${HOST} ]; then
-    echo "Usage: backup.sh <hostname> <annotation> <expiry-in-days>."
+    echo "Usage: backup.sh [--dry-run | -n ] [ --force | -f ] <hostname> <annotation> <expiry-in-days>."
     exit 99
 fi
 
@@ -36,20 +66,24 @@ else
     trap "{ rm -f ${LOCKFILE}; }" EXIT
 fi
 
-# source host config
 sourceHostConfig $HOSTS_DIR $HOST
-
 # Options Overridable by backup.conf (or command line)
 EXPIRY=$(expr ${3-$EXPIRY} \* 24 \* 60 \* 60 + `date +%s`) # Convert expiry to unix epoc
 
 # Check to see if the host backup is disabled.
-if [ "${DISABLED}" == "true" ];  then
+if [ "${DISABLED}" == "true" ] && [ -z "$FORCE" ];  then
     logMessage 1 $LOGFILE "Info: ${HOST} backup disabled by config."
     exit 0
 fi
 
 # expand excludes (with support for strings with escaped spaces)
 eval "for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do RSYNC_EXCLUDES=\"\$RSYNC_EXCLUDES --exclude='\${e}'\"; done"
+
+# FIXME. Refactor do backup so we can properly handly dry-run
+if [ -n "$DRYRUN" ] ; then
+    echo "$DRYRUN Would have backed up $HOST."
+    exit
+fi
 
 # Do backup
 (
