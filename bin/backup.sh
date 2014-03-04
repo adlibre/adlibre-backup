@@ -11,8 +11,6 @@ CWD="$(dirname $0)/"
 . ${CWD}functions.sh;
 
 HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
-LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//)-${HOST}.pid"
-LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
 DRYRUN=
 FORCE=
 
@@ -49,6 +47,8 @@ done
 
 HOST=$1
 ANNOTATION=${2-none}
+LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//)-${HOST}.pid"
+LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
 # source host config
 
 if [ ! ${HOST} ]; then
