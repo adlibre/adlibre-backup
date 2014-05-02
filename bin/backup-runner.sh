@@ -52,7 +52,7 @@ while true; do
         -c | --comment ) ANNOTATION=$2; shift 2 ;;
         -h | --help ) showUsage; exit 128 ;;
         -- ) shift; break ;;
-        * ) if [ ! "$1" == "" ]; then HOSTS="$HOSTS $1"; fi; shift; break ;;
+        * ) if [ ! "$1" == "" ]; then HOSTS="$HOSTS $*"; fi; shift; break ;;
     esac
 done
 
