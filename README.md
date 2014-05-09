@@ -178,7 +178,5 @@ Just dive in and copy the files out of the snapshot:
 
 This should be considered "beta" status.
 
-It is planned that later versions will be rewritten in Python.
-
 See [TODO](TODO.md) and [ISSUES](ISSUES.md) for outstanding issues and current bugs.
 And [NOTES](NOTES.md) for development information.
