@@ -10,7 +10,7 @@ CWD="$(dirname $0)/"
 # Source Functions
 . ${CWD}functions.sh;
 
-HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
+HOSTS_DIR="/${POOL_NAME}/hosts/"
 DRYRUN=
 FORCE=
 
@@ -107,7 +107,7 @@ if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
     else
         SNAP_NAME="${HOST}@$(date +"%F-%X-%s")-partial"
     fi    
-    zfs snapshot $ZPOOL_NAME/hosts/${SNAP_NAME}
+    zfs snapshot $POOL_NAME/hosts/${SNAP_NAME}
     SNAPSHOT_RETVAL=$?
     
     if [ "$RSYNC_RETVAL" = "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ]; then

@@ -12,9 +12,9 @@ CWD="$(dirname $0)/"
 # Source Functions
 . ${CWD}functions.sh;
 
-HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
+HOSTS_DIR="/${POOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//).pid"
-LOGFILE="/${ZPOOL_NAME}/logs/backup.log"
+LOGFILE="/${POOL_NAME}/logs/backup.log"
 DRYRUN=
 FORCE=
 
@@ -91,9 +91,9 @@ for HOST in $HOSTS; do
                     logMessage 1 $LOGFILE "Info: Removing snapshot ${snapshot}."
                     SNAPSHOT=$(basename $snapshot)
                     if [ -n "$DRYRUN" ] ; then
-                        echo $DRYRUN zfs destroy ${ZPOOL_NAME}/hosts/${HOST}@${SNAPSHOT}
+                        echo $DRYRUN zfs destroy ${POOL_NAME}/hosts/${HOST}@${SNAPSHOT}
                     else
-                        zfs destroy ${ZPOOL_NAME}/hosts/${HOST}@${SNAPSHOT}
+                        zfs destroy ${POOL_NAME}/hosts/${HOST}@${SNAPSHOT}
                     fi
                 fi
             fi
