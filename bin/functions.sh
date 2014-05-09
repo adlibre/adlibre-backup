@@ -53,10 +53,76 @@ sourceHostConfig() {
     if [ -f  "${1}${2}/c/backup.conf" ]; then
         . "${1}${2}/c/backup.conf"
         # Check Sanity of Config (unified with global config)
-        command -v $RSYNC_BIN > /dev/null || echo "rsync not found. Please specify \$RSYNC_BIN location in backup.conf."
-        command -v $NSCA_BIN > /dev/null || echo "send_nsca not found. Please specify \$NSCA_BIN location in backup.conf."
+        command -v $RSYNC_BIN > /dev/null || echo "Warning: rsync not found. Please specify \$RSYNC_BIN location in backup.conf."
+        command -v $NSCA_BIN > /dev/null || echo "Warning: send_nsca not found. Please specify \$NSCA_BIN location in backup.conf."
     else
         echo "Error: Invalid host or host config not found."
         exit 99
     fi
 }
+
+#
+# Create Storage Subvolume
+#
+storageCreate() {
+    # $1 = POOL_TYPE (zfs or btrfs)
+    # $2 = path
+
+    case "$1" in
+        btrfs)
+            btrfs subvolume create /${2}
+            ;;
+        zfs)
+            zfs create ${2}
+            ;;
+        *)
+            echo "Warning: POOL_TYPE unknown."
+            break
+            ;;
+    esac
+}
+
+#
+# Snapshot Storage Subvolume
+#
+storageSnapshot() {
+    # $1 = POOL_TYPE (zfs or btrfs)
+    # $2 = path
+    # $3 = snapshot
+
+    case "$1" in
+        btrfs)
+            btrfs subvolume snapshot /${2} /${2}/.btrfs/snapshot/${3}
+            ;;
+        zfs)
+            zfs snapshot ${2}${3}
+            ;;
+        *)
+            echo "Warning: POOL_TYPE unknown."
+            break
+            ;;
+    esac
+}
+
+#
+# Delete Storage Subvolume
+#
+storageDelete() {
+    # $1 = POOL_TYPE (zfs or btrfs)
+    # $2 = path
+    # $3 = snapshot (optional)
+
+    case "$1" in
+        btrfs)
+            btrfs subvolume delete /${2}/.btrfs/snapshot/${3}
+            ;;
+        zfs)
+            zfs destroy ${2}@${3}
+            ;;
+        *)
+            echo "Warning: POOL_TYPE unknown."
+            break
+            ;;
+    esac
+}
+

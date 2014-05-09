@@ -103,11 +103,11 @@ if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
 
     # Create snapshot    
     if [ "$RSYNC_RETVAL" = "0" ]; then
-        SNAP_NAME="${HOST}@$(date +"%F-%X-%s")"
+        SNAP_NAME="@$(date +"%F-%X-%s")"
     else
-        SNAP_NAME="${HOST}@$(date +"%F-%X-%s")-partial"
+        SNAP_NAME="@$(date +"%F-%X-%s")-partial"
     fi    
-    zfs snapshot $POOL_NAME/hosts/${SNAP_NAME}
+    storageSnapshot $POOL_TYPE $POOL_NAME/hosts/${HOST} ${SNAP_NAME}
     SNAPSHOT_RETVAL=$?
     
     if [ "$RSYNC_RETVAL" = "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ]; then

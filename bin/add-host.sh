@@ -19,16 +19,19 @@ fi
 
 # Create hosts subvolume
 if [ ! -d "/${POOL_NAME}/hosts/" ]; then
-    zfs create ${POOL_NAME}/hosts
+    storageCreate $POOL_TYPE ${POOL_NAME}/hosts
 fi
 
 # Create host subvolume
 if [ ! -d "/${POOL_NAME}/hosts/${HOST}" ]; then
-    zfs create ${POOL_NAME}/hosts/${HOST}
+    storageCreate $POOL_TYPE ${POOL_NAME}/hosts/${HOST}
     mkdir /${POOL_NAME}/hosts/${HOST}/c
     mkdir /${POOL_NAME}/hosts/${HOST}/d
     mkdir /${POOL_NAME}/hosts/${HOST}/l
     cp /${POOL_NAME}/etc/host_default.conf /${POOL_NAME}/hosts/${HOST}/c/backup.conf
+    if [ "${POOL_TYPE}" == "btrfs" ]; then 
+        mkdir -p /${POOL_NAME}/hosts/${HOST}/.btrfs/snapshot
+    fi
 else
     echo "Error: Host already exists."
     exit 99
