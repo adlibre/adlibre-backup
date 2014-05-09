@@ -12,9 +12,9 @@ CWD="$(dirname $0)/"
 # Source Functions
 . ${CWD}functions.sh;
 
-HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
+HOSTS_DIR="/${POOL_NAME}/hosts/"
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//).pid"
-LOGFILE="/${ZPOOL_NAME}/logs/backup.log"
+LOGFILE="/${POOL_NAME}/logs/backup.log"
 DRYRUN=
 FORCE=
 
@@ -82,8 +82,8 @@ for HOST in $HOSTS; do
         logMessage 1 $LOGFILE "Info: Pruning snapshots for ${HOST}."
     fi
     # Prune the backup
-    if [ -d ${HOSTS_DIR}${HOST}/.zfs/snapshot ]; then
-        SNAPSHOTS=$(find ${HOSTS_DIR}${HOST}/.zfs/snapshot -maxdepth 1 -mindepth 1)
+    if [ -d ${HOSTS_DIR}${HOST}/.${POOL_TYPE}/snapshot ]; then
+        SNAPSHOTS=$(find ${HOSTS_DIR}${HOST}/.${POOL_TYPE}/snapshot -maxdepth 1 -mindepth 1)
         for snapshot in $SNAPSHOTS; do
             if [ -f $snapshot/c/EXPIRY ]; then
                 EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
@@ -91,9 +91,9 @@ for HOST in $HOSTS; do
                     logMessage 1 $LOGFILE "Info: Removing snapshot ${snapshot}."
                     SNAPSHOT=$(basename $snapshot)
                     if [ -n "$DRYRUN" ] ; then
-                        echo $DRYRUN zfs destroy ${ZPOOL_NAME}/hosts/${HOST}@${SNAPSHOT}
+                        echo $DRYRUN destroy ${POOL_NAME}/hosts/${HOST} ${SNAPSHOT}
                     else
-                        zfs destroy ${ZPOOL_NAME}/hosts/${HOST}@${SNAPSHOT}
+                        storageDelete $POOL_TYPE ${POOL_NAME}/hosts/${HOST} ${SNAPSHOT}
                     fi
                 fi
             fi

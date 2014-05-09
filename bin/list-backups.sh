@@ -10,7 +10,7 @@ CWD="$(dirname $0)/"
 # Source Functions
 . ${CWD}functions.sh;
 
-HOSTS_DIR="/${ZPOOL_NAME}/hosts/"
+HOSTS_DIR="/${POOL_NAME}/hosts/"
 
 if [ ! $(whoami) = "root" ]; then
     echo "Error: Must run as root."
@@ -28,8 +28,8 @@ else
 fi
 
 for host in $HOSTS; do
-    if [ -d ${HOSTS_DIR}${host}/.zfs/snapshot ]; then
-        SNAPSHOTS=$(find ${HOSTS_DIR}${host}/.zfs/snapshot -maxdepth 1 -mindepth 1 | sort)
+    if [ -d ${HOSTS_DIR}${host}/.${POOL_TYPE}/snapshot ]; then
+        SNAPSHOTS=$(find ${HOSTS_DIR}${host}/.${POOL_TYPE}/snapshot -maxdepth 1 -mindepth 1 | sort)
         for snapshot in $SNAPSHOTS; do
             SNAPSHOT=$(basename $snapshot)
             EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)

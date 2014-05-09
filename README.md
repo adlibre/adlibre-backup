@@ -5,10 +5,13 @@ operating systems.
 
 Designed with system administrators in mind.
 
+Utilises native BTRFS / ZFS filesystem features for seamless compression,
+deduplication and snapshoting of the backup pool.
+
 #### The problem
 
 Existing Rsync backup approaches (eg [Rsnapshot](http://www.rsnapshot.org/) /
-[BackupPC](http://backuppc.sourceforge.net/)) don't scale and are hard to monitor
+[BackupPC](http://backuppc.sourceforge.net/)) don't scale, are hard to monitor
 and maintain when used with dozens or hundreds of hosts.
 
 They also don't elegantly handle ad hoc backups, nor do they facilitate quickly
@@ -36,11 +39,11 @@ backup format.
 ###  Features
 
 * Agentless
-* Utilises ZFS (and later Btrfs) native filesystem features, eg snapshot, dedup
+* Utilises BTRFS and ZFS filesystem features, eg snapshot, dedup
 and compression
 * Uses [Rsync](http://en.wikipedia.org/wiki/Rsync) and
 [SSH](http://en.wikipedia.org/wiki/OpenSSH) for transport
-* Integration with monitoring tools such as Nagios and Icinga using NSCA passive
+* Integration with monitoring tools such as Nagios or Icinga using NSCA passive
 checks.
 * Centralised configuration and management - all configuration and scheduling is
 done on the backup server
@@ -49,19 +52,19 @@ when or why the backup was taken and per backup retention periods
 * Per host backup, retention and quota policies
 * Per host configuration and logs stored with the snapshot
 * Utilise LVM snapshots for performing atomic backups of Linux systems. See
-[atomic.sh](https://github.com/adlibre/atomic-rsync/)
+[atomic.sh](https://github.com/adlibre/atomic-rsync/) (Work in progress).
 
 ## Installation
 
-Adlibre Backup requires an operating system with ZFS support (eg
+An operating system with BTRFS or ZFS support is required (eg
 [FreeBSD](http://www.freebsd.org) or [ZFS on Linux](http://zfsonlinux.org/))
-and a dedicated zpool for backup storage. Future versions may support Linux
-Btrfs.
+and a dedicated storage pool.
 
-Check out the source code into the root of your backup zpool and review
-``./conf/backup.conf`` as necessary to set your zpool options.
+Check out the source code into the root of your backup pool and review
+``./conf/backup.conf``. Modify as necessary to set your pool and filesystem 
+options.
 
-### Red Hat / CentOS / EL Installation and Usage Example
+### Red Hat / CentOS / EL Installation and ZFS Usage Example
 
 Create _backup_ zpool with dedup and compression.
 
@@ -118,7 +121,7 @@ Now if you want to schedule daily backups Add the following to your root crontab
 Then customise the per host config in ``./hosts/<hostname>/c/backup.conf`` and
 ssh options in ``~/.ssh/config`` if required.
 
-### Removing a host
+### Removing a host (ZFS)
 
 To immediately purge the host configuration and all backup data:
 
@@ -142,7 +145,7 @@ or multiple hosts
 
 ``./bin/backup-runner.sh <hostname> <hostname>...``
 
-### Restoring
+### Restoring (ZFS)
 
 All backups are stored on disk in plain sight. To restore all you need to do
 is copy (or rsync) the files from the backup pool to your host.
@@ -175,8 +178,7 @@ Just dive in and copy the files out of the snapshot:
 
 This should be considered "beta" status.
 
-It is planned that later versions will be rewritten in Python and will support
-Btrfs on Linux.
+It is planned that later versions will be rewritten in Python.
 
 See [TODO](TODO.md) and [ISSUES](ISSUES.md) for outstanding issues and current bugs.
 And [NOTES](NOTES.md) for development information.

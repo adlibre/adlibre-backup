@@ -15,7 +15,7 @@ Development notes for the current Bourne shell implementation.
 * /backup/bin/ - program / scripts
 * /backup/etc/ - global config
 * /backup/hosts/ - hosts root
-* /backup/hosts/example.com/ - ZFS snapshot / filesystem 
+* /backup/hosts/example.com/ - ZFS / BTRFS subvolume
 * /backup/hosts/example.com/c/ - per host config
 * /backup/hosts/example.com/d/ - data root
 * /backup/hosts/example.com/l/ - per host logs
