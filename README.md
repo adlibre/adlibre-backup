@@ -60,8 +60,9 @@ An operating system with BTRFS or ZFS support is required (eg
 [FreeBSD](http://www.freebsd.org) or [ZFS on Linux](http://zfsonlinux.org/))
 and a dedicated storage pool.
 
-Check out the source code into the root of your backup zpool and review
-``./conf/backup.conf`` as necessary to set your pool and filesystem options.
+Check out the source code into the root of your backup pool and review
+``./conf/backup.conf``. Modify as necessary to set your pool and filesystem 
+options.
 
 ### Red Hat / CentOS / EL Installation and ZFS Usage Example
 
