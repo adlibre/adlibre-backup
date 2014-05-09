@@ -1,10 +1,12 @@
 # To Do
 
-These are some features that are considered for implementation.
+These are some features that were initially considered for implementation. It is likely that
+many of these will never be implemented simply because this tool has proven itself to be sufficiently robust
+and useful without these features.
 
 ## Earlier
-
-* Develop backup auto snapshoting to provide support for weekly / monthly / yearly style retention schemes 
+* Support for send/receive (ZFS/Brfs) independent of rsync.
+* Develop backup auto snapshoting to provide support for weekly / monthly / yearly style retention schemes
 * Config verify mode (rsync dry run)
 * Backup verify (eg rsync force checksum + dry run mode + verbose)
 * Fault tolerant backup runner (eg retries)
