@@ -5,10 +5,13 @@ operating systems.
 
 Designed with system administrators in mind.
 
+Utilises native BTRFS / ZFS filesystem features for seamless compression,
+deduplication and snapshoting of the backup pool.
+
 #### The problem
 
 Existing Rsync backup approaches (eg [Rsnapshot](http://www.rsnapshot.org/) /
-[BackupPC](http://backuppc.sourceforge.net/)) don't scale and are hard to monitor
+[BackupPC](http://backuppc.sourceforge.net/)) don't scale, are hard to monitor
 and maintain when used with dozens or hundreds of hosts.
 
 They also don't elegantly handle ad hoc backups, nor do they facilitate quickly
@@ -141,7 +144,7 @@ or multiple hosts
 
 ``./bin/backup-runner.sh <hostname> <hostname>...``
 
-### Restoring
+### Restoring (ZFS)
 
 All backups are stored on disk in plain sight. To restore all you need to do
 is copy (or rsync) the files from the backup pool to your host.
