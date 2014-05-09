@@ -52,16 +52,16 @@ when or why the backup was taken and per backup retention periods
 * Per host backup, retention and quota policies
 * Per host configuration and logs stored with the snapshot
 * Utilise LVM snapshots for performing atomic backups of Linux systems. See
-[atomic.sh](https://github.com/adlibre/atomic-rsync/)
+[atomic.sh](https://github.com/adlibre/atomic-rsync/) (Work in progress).
 
 ## Installation
 
-Adlibre Backup requires an operating system with BTRFS or ZFS support (eg
+An operating system with BTRFS or ZFS support is required (eg
 [FreeBSD](http://www.freebsd.org) or [ZFS on Linux](http://zfsonlinux.org/))
-and a dedicated zpool for backup storage.
+and a dedicated storage pool.
 
 Check out the source code into the root of your backup zpool and review
-``./conf/backup.conf`` as necessary to set your zpool options.
+``./conf/backup.conf`` as necessary to set your pool and filesystem options.
 
 ### Red Hat / CentOS / EL Installation and ZFS Usage Example
 
