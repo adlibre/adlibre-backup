@@ -1,13 +1,13 @@
 # To Do
 
-These are some features that are planned for implementation.
+These are some features that are considered for implementation.
 
-## Soon
+## Earlier
 
 * Develop backup auto snapshoting to provide support for weekly / monthly / yearly style retention schemes 
 * Config verify mode (rsync dry run)
 * Backup verify (eg rsync force checksum + dry run mode + verbose)
-* Fault tolerant backup runner
+* Fault tolerant backup runner (eg retries)
 * ad hoc backups should (optionally) emit an email on completion
 * nohup should be used for ad hoc backups so they are not accidentally
 terminated when run interactively.

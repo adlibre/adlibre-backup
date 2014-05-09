@@ -36,11 +36,11 @@ backup format.
 ###  Features
 
 * Agentless
-* Utilises ZFS (and later Btrfs) native filesystem features, eg snapshot, dedup
+* Utilises BTRFS and ZFS filesystem features, eg snapshot, dedup
 and compression
 * Uses [Rsync](http://en.wikipedia.org/wiki/Rsync) and
 [SSH](http://en.wikipedia.org/wiki/OpenSSH) for transport
-* Integration with monitoring tools such as Nagios and Icinga using NSCA passive
+* Integration with monitoring tools such as Nagios or Icinga using NSCA passive
 checks.
 * Centralised configuration and management - all configuration and scheduling is
 done on the backup server
@@ -53,15 +53,14 @@ when or why the backup was taken and per backup retention periods
 
 ## Installation
 
-Adlibre Backup requires an operating system with ZFS support (eg
+Adlibre Backup requires an operating system with BTRFS or ZFS support (eg
 [FreeBSD](http://www.freebsd.org) or [ZFS on Linux](http://zfsonlinux.org/))
-and a dedicated zpool for backup storage. Future versions may support Linux
-Btrfs.
+and a dedicated zpool for backup storage.
 
 Check out the source code into the root of your backup zpool and review
 ``./conf/backup.conf`` as necessary to set your zpool options.
 
-### Red Hat / CentOS / EL Installation and Usage Example
+### Red Hat / CentOS / EL Installation and ZFS Usage Example
 
 Create _backup_ zpool with dedup and compression.
 
@@ -118,7 +117,7 @@ Now if you want to schedule daily backups Add the following to your root crontab
 Then customise the per host config in ``./hosts/<hostname>/c/backup.conf`` and
 ssh options in ``~/.ssh/config`` if required.
 
-### Removing a host
+### Removing a host (ZFS)
 
 To immediately purge the host configuration and all backup data:
 
@@ -175,8 +174,7 @@ Just dive in and copy the files out of the snapshot:
 
 This should be considered "beta" status.
 
-It is planned that later versions will be rewritten in Python and will support
-Btrfs on Linux.
+It is planned that later versions will be rewritten in Python.
 
 See [TODO](TODO.md) and [ISSUES](ISSUES.md) for outstanding issues and current bugs.
 And [NOTES](NOTES.md) for development information.
