@@ -22,7 +22,7 @@ adding and removing hosts.
 Our solution is centralised and agentless, so there is nothing to consume
 resources on your hosts, and all configuration is managed on the backup server.
 
-Utilises ZFS (and later Btrfs) native filesystem snapshots, and per host
+Utilises BTRFS / ZFS native filesystem snapshots, and per host
 filesystems for better performance, scalability and ease of management.
 
 Backups can be run at anytime, with custom expiry and a short message so you
@@ -39,7 +39,7 @@ backup format.
 ###  Features
 
 * Agentless
-* Utilises BTRFS and ZFS filesystem features, eg snapshot, dedup
+* Utilises BTRFS / ZFS filesystem features, eg snapshot, dedup
 and compression
 * Uses [Rsync](http://en.wikipedia.org/wiki/Rsync) and
 [SSH](http://en.wikipedia.org/wiki/OpenSSH) for transport
