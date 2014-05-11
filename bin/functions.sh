@@ -92,7 +92,7 @@ storageSnapshot() {
 
     case "$1" in
         btrfs)
-            btrfs subvolume snapshot /${2} /${2}/.btrfs/snapshot/${3}
+            btrfs subvolume snapshot -r /${2} /${2}/.btrfs/snapshot/${3}
             ;;
         zfs)
             zfs snapshot ${2}${3}
