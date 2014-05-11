@@ -54,7 +54,9 @@ sourceHostConfig() {
         . "${1}${2}/c/backup.conf"
         # Check Sanity of Config (unified with global config)
         command -v $RSYNC_BIN > /dev/null || echo "Warning: rsync not found. Please specify \$RSYNC_BIN location in backup.conf."
-        command -v $NSCA_BIN > /dev/null || echo "Warning: send_nsca not found. Please specify \$NSCA_BIN location in backup.conf."
+        if [ "$NSCA_ENABLED" == "true" ]; then
+            command -v $NSCA_BIN > /dev/null || echo "Warning: send_nsca not found. Please specify \$NSCA_BIN location in backup.conf."
+        fi
     else
         echo "Error: Invalid host or host config not found."
         exit 99

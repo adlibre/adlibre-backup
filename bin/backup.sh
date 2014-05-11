@@ -111,23 +111,31 @@ if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
     SNAPSHOT_RETVAL=$?
     
     if [ "$RSYNC_RETVAL" = "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ]; then
-        raiseAlert "backup ${HOST}" 0 "Backup Successful. Runtime ${RUNTIME} seconds."
-        raiseAlert "${ANNOTATION}" 0 "Backup Successful. Runtime ${RUNTIME} seconds." ${HOST}
+        if [ "$NSCA_ENABLED" == "true" ]; then
+            raiseAlert "backup ${HOST}" 0 "Backup Successful. Runtime ${RUNTIME} seconds."
+            raiseAlert "${ANNOTATION}" 0 "Backup Successful. Runtime ${RUNTIME} seconds." ${HOST}
+        fi
         logMessage 1 $LOGFILE "Backup Successful. Runtime ${RUNTIME} seconds."
     elif [ "$RSYNC_RETVAL" = "0" ] && [ "$SNAPSHOT_RETVAL" != "0" ]; then
-        raiseAlert "backup ${HOST}" 2 "Backup succeeded, but Snapshot Failed"
+        if [ "$NSCA_ENABLED" == "true" ]; then
+            raiseAlert "backup ${HOST}" 2 "Backup succeeded, but Snapshot Failed"
+        fi
         logMessage 3 $LOGFILE "Backup succeeded, but snapshot ${SNAP_NAME} Failed"
         exit 99
     elif [ "$RSYNC_RETVAL" != "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ] && [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
-        # Downgrade rsync failure error to nagios warning (because SNAPSHOT_ON_ERROR=true)
-        raiseAlert "backup ${HOST}" 1 "Backup Failed: ${CMD}. Snapshotted anyway."
-        raiseAlert "${ANNOTATION}" 1 "Backup Failed: ${CMD}. Snapshotted anyway." ${HOST}
+        if [ "$NSCA_ENABLED" == "true" ]; then
+            # Downgrade rsync failure error to nagios warning (because SNAPSHOT_ON_ERROR=true)
+            raiseAlert "backup ${HOST}" 1 "Backup Failed: ${CMD}. Snapshotted anyway."
+            raiseAlert "${ANNOTATION}" 1 "Backup Failed: ${CMD}. Snapshotted anyway." ${HOST}
+        fi
         logMessage 3 $LOGFILE "Backup Error: ${CMD}. Rsync exited with ${RSYNC_RETVAL}. Snapshotted anyway."
         exit 99
     fi
 else
-    raiseAlert "backup ${HOST}" 2 "Backup Failed: ${CMD}."
-    raiseAlert "${ANNOTATION}" 2 "Backup Failed: ${CMD}." ${HOST}
+    if [ "$NSCA_ENABLED" == "true" ]; then
+        raiseAlert "backup ${HOST}" 2 "Backup Failed: ${CMD}."
+        raiseAlert "${ANNOTATION}" 2 "Backup Failed: ${CMD}." ${HOST}
+    fi
     logMessage 3 $LOGFILE "Backup Failed: ${CMD}. Rsync exited with ${RSYNC_RETVAL}."
     exit 99
 fi
