@@ -49,7 +49,6 @@ HOST=$1
 ANNOTATION=${2-none}
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//)-${HOST}.pid"
 LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
-# source host config
 
 if [ ! ${HOST} ]; then
     echo "Usage: backup.sh [--dry-run | -n ] [ --force | -f ] <hostname> <annotation> <expiry-in-days>."
@@ -66,7 +65,9 @@ else
     trap "{ rm -f ${LOCKFILE}; }" EXIT
 fi
 
+# source host config
 sourceHostConfig $HOSTS_DIR $HOST
+
 # Options Overridable by backup.conf (or command line)
 EXPIRY=$(expr ${3-$EXPIRY} \* 24 \* 60 \* 60 + `date +%s`) # Convert expiry to unix epoc
 
