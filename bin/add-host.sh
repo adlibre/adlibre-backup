@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Adlibre Backup - Add new host
 

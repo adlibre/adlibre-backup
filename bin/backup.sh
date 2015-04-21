@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Adlibre Backup - Backup Single Host
 
@@ -69,7 +69,20 @@ fi
 sourceHostConfig $HOSTS_DIR $HOST
 
 # Options Overridable by backup.conf (or command line)
-EXPIRY=$(expr ${3-$EXPIRY} \* 24 \* 60 \* 60 + `date +%s`) # Convert expiry to unix epoc
+
+if [ -z "${3}" ]; then
+	if [ -v EXPIRY_WEEK -a "$(date +%u)" == "0" ]; then EXPIRY=${EXPIRY_WEEK}; fi
+	if [ -v EXPIRY_MONTH -a "$(date +%-d)" == "1" ]; then EXPIRY=${EXPIRY_MONTH}; fi
+	if [ -v EXPIRY_QUARTER -a "$(date +%-d)" == "1" -a "$(expr $(date '+%-m') % 3)" == "1" ]; then EXPIRY=${EXPIRY_QUARTER}; fi
+	if [ -v EXPIRY_YEAR -a "$(date +%-j)" == "1" ]; then EXPIRY=${EXPIRY_YEAR}; fi
+	echo "Expiry: $EXPIRY"
+else
+	EXPIRY=${3}
+fi
+
+if [ "${EXPIRY}" -gt "0" ]; then
+	EXPIRY=$(expr ${EXPIRY} \* 24 \* 60 \* 60 + `date +%s`) # Convert expiry to unix epoc
+fi
 
 # Check to see if the host backup is disabled.
 if [ "${DISABLED}" == "true" ] && [ -z "$FORCE" ];  then
@@ -82,14 +95,17 @@ eval "for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do RSYNC_EXCLUDES=\"\$RSYNC_EXCLUDE
 
 # FIXME. Refactor do backup so we can properly handly dry-run
 if [ -n "$DRYRUN" ] ; then
-    echo "$DRYRUN Would have backed up $HOST."
+    echo "$DRYRUN Would have backed up $HOST with annotation ($ANNOTATION) and expiry ($EXPIRY)"
     exit
 fi
 
 # Do backup
 (
 rm -f ${LOGFILE} # delete logfile from host dir before we begin.
-echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
+rm -f ${HOSTS_DIR}${HOST}/c/EXPIRY
+if [ "${EXPIRY}" -gt "0" ]; then
+	echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
+fi
 echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
 
 STARTTIME=$(date +%s)
