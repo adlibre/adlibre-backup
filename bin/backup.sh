@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Adlibre Backup - Backup Single Host
 
@@ -71,11 +71,14 @@ sourceHostConfig $HOSTS_DIR $HOST
 # Options Overridable by backup.conf (or command line)
 
 if [ -z "${3}" ]; then
-	if [ -v EXPIRY_WEEK -a "$(date +%u)" == "0" ]; then EXPIRY=${EXPIRY_WEEK}; fi
-	if [ -v EXPIRY_MONTH -a "$(date +%-d)" == "1" ]; then EXPIRY=${EXPIRY_MONTH}; fi
-	if [ -v EXPIRY_QUARTER -a "$(date +%-d)" == "1" -a "$(expr $(date '+%-m') % 3)" == "1" ]; then EXPIRY=${EXPIRY_QUARTER}; fi
-	if [ -v EXPIRY_YEAR -a "$(date +%-j)" == "1" ]; then EXPIRY=${EXPIRY_YEAR}; fi
-	echo "Expiry: $EXPIRY"
+	NUM_BACKUPS_TODAY=$(find ${HOSTS_DIR}${HOST}/.${POOL_TYPE}/snapshot -maxdepth 1 -mindepth 1 -name "@$(date +%F)*" | grep -v -e "-partial$" | wc -l)
+	if [ "${NUM_BACKUPS_TODAY}" -eq "0" ]; then
+		if [ -n "${EXPIRY_DAY}" ]; then EXPIRY=${EXPIRY_DAY}; fi
+		if [ -n "${EXPIRY_WEEK}" -a "$(date +%u)" == "1" ]; then EXPIRY=${EXPIRY_WEEK}; fi
+		if [ -n "${EXPIRY_MONTH}" -a "$(date +%-d)" == "1" ]; then EXPIRY=${EXPIRY_MONTH}; fi
+		if [ -n "${EXPIRY_QUARTER}" -a "$(date +%-d)" == "1" -a "$(expr $(date '+%-m') % 3)" == "1" ]; then EXPIRY=${EXPIRY_QUARTER}; fi
+		if [ -n "${EXPIRY_YEAR}" -a "$(date +%-j)" == "1" ]; then EXPIRY=${EXPIRY_YEAR}; fi
+	fi
 else
 	EXPIRY=${3}
 fi

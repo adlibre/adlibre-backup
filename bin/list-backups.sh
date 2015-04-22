@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Adlibre Backup - List backups for a host
 
 CWD="$(dirname $0)/"
 
 # Source Config
-. ${CWD}../etc/backup.conf
+. ${CWD}../etc/backup.confgit 
 
 # Source Functions
 . ${CWD}functions.sh;

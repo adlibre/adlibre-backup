@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Adlibre Backup - Backup Runner - Backup Multiple hosts
 
