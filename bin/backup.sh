@@ -82,7 +82,7 @@ eval "for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do RSYNC_EXCLUDES=\"\$RSYNC_EXCLUDE
 
 # FIXME. Refactor do backup so we can properly handly dry-run
 if [ -n "$DRYRUN" ] ; then
-    echo "$DRYRUN Would have backed up $HOST."
+    echo "$DRYRUN Would have backed up $HOST with annotation ($ANNOTATION) and expiry ($EXPIRY)"
     exit
 fi
 
