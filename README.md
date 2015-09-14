@@ -176,7 +176,7 @@ Just dive in and copy the files out of the snapshot:
 
 ## Status
 
-This should be considered "beta" status.
+This has been in production use for many years now and is stable.
 
-See [TODO](TODO.md) and [ISSUES](ISSUES.md) for outstanding issues and current bugs.
+See [TODO](TODO.md) and [ISSUES](ISSUES.md) for outstanding issues.
 And [NOTES](NOTES.md) for development information.
