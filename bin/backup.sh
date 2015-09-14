@@ -80,6 +80,13 @@ fi
 # expand excludes (with support for strings with escaped spaces)
 eval "for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do RSYNC_EXCLUDES=\"\$RSYNC_EXCLUDES --exclude='\${e}'\"; done"
 
+# Generate rsync compatible backup path arguments
+for P in $BACKUP_PATHS; do
+   [ "${#P}" -ne "1" ] && P=${P%/}  # Remove trailing /
+   P=":${P} "  # Add :
+   RSYNC_BACKUP_PATHS="${RSYNC_BACKUP_PATHS}${P}"
+done
+
 # FIXME. Refactor do backup so we can properly handly dry-run
 if [ -n "$DRYRUN" ] ; then
     echo "$DRYRUN Would have backed up $HOST with annotation ($ANNOTATION) and expiry ($EXPIRY)"
@@ -93,7 +100,8 @@ echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
 echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
 
 STARTTIME=$(date +%s)
-RSYNC_CMD="${RSYNC_BIN} ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${HOST}:'$BACKUP_PATHS' ${HOSTS_DIR}${HOST}/d/"
+
+RSYNC_CMD="${RSYNC_BIN} ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${HOST}${RSYNC_BACKUP_PATHS} ${HOSTS_DIR}${HOST}/d/"
 logMessage 1 $LOGFILE "Running: $RSYNC_CMD"
 CMD=$(eval $RSYNC_CMD 2>&1;)
 RSYNC_RETVAL=$?
