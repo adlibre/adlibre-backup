@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Adlibre Backup - List backups for a host
+# Adlibre Backup - List status of most recent backup
 
 CWD="$(dirname $0)/"
 
@@ -28,16 +28,13 @@ else
 fi
 
 for host in $HOSTS; do
+    backup=${HOSTS_DIR}${host}
+    ANNOTATION=$(cat $backup/c/ANNOTATION 2> /dev/null)
+    STATUS=$(cat $backup/l/STATUS 2> /dev/null)
     if [ -d ${HOSTS_DIR}${host}/.${POOL_TYPE}/snapshot ]; then
-        SNAPSHOTS=$(find ${HOSTS_DIR}${host}/.${POOL_TYPE}/snapshot -maxdepth 1 -mindepth 1 | sort)
-        for snapshot in $SNAPSHOTS; do
-            SNAPSHOT=$(basename $snapshot)
-            EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
-            ANNOTATION=$(cat $snapshot/c/ANNOTATION 2> /dev/null)
-            STATUS=$(cat $snapshot/l/STATUS 2> /dev/null)
-            echo "$host $SNAPSHOT $EXPIRY $STATUS \"$ANNOTATION\""
-        done
+        LATEST=$(basename $(find ${HOSTS_DIR}${host}/.${POOL_TYPE}/snapshot -maxdepth 1 -mindepth 1 | sort | head -n 1) 2> /dev/null | cut -c 1-16)
     fi
+    echo "$host $STATUS ${LATEST:-none} \"$ANNOTATION\""
 done
 
 exit 0

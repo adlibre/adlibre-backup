@@ -49,6 +49,7 @@ HOST=$1
 ANNOTATION=${2-none}
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//)-${HOST}.pid"
 LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
+STATUSFILE="${HOSTS_DIR}${HOST}/l/STATUS"
 
 if [ ! ${HOST} ]; then
     echo "Usage: backup.sh [--dry-run | -n ] [ --force | -f ] <hostname> <annotation> <expiry-in-days>."
@@ -74,6 +75,7 @@ EXPIRY=$(expr ${3-$EXPIRY} \* 24 \* 60 \* 60 + `date +%s`) # Convert expiry to u
 # Check to see if the host backup is disabled.
 if [ "${DISABLED}" == "true" ] && [ -z "$FORCE" ];  then
     logMessage 1 $LOGFILE "Info: ${HOST} backup disabled by config."
+    echo "disabled" > $STATUSFILE
     exit 0
 fi
 
@@ -96,6 +98,7 @@ fi
 # Do backup
 (
 rm -f ${LOGFILE} # delete logfile from host dir before we begin.
+echo "inprogress" > $STATUSFILE
 echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
 echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
 
@@ -110,11 +113,13 @@ RUNTIME=$(expr ${STOPTIME} - ${STARTTIME})
 
 if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
 
-    # Create snapshot    
+    # Create snapshot
     if [ "$RSYNC_RETVAL" = "0" ]; then
         SNAP_NAME="@$(date +"%F-%X-%s")"
+        echo "successful" > $STATUSFILE
     else
         SNAP_NAME="@$(date +"%F-%X-%s")-partial"
+        echo "partial" > $STATUSFILE
     fi    
     storageSnapshot $POOL_TYPE $POOL_NAME/hosts/${HOST} ${SNAP_NAME}
     SNAPSHOT_RETVAL=$?
@@ -146,6 +151,7 @@ else
         raiseAlert "${ANNOTATION}" 2 "Backup Failed: ${CMD}." ${HOST}
     fi
     logMessage 3 $LOGFILE "Backup Failed: ${CMD}. Rsync exited with ${RSYNC_RETVAL}."
+    echo "failed" > $STATUSFILE
     exit 99
 fi
 
