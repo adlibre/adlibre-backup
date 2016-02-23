@@ -32,7 +32,7 @@ while test $# -gt 0; do
         FORCE=true
         shift
         ;;
-    --)	# Stop option processing.
+    --) # Stop option processing.
         shift; break
         ;;
     -*)
