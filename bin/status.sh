@@ -32,7 +32,7 @@ for host in $HOSTS; do
     ANNOTATION=$(cat $backup/c/ANNOTATION 2> /dev/null)
     STATUS=$(cat $backup/l/STATUS 2> /dev/null)
     if [ -d ${HOSTS_DIR}${host}/.${POOL_TYPE}/snapshot ]; then
-        SNAP=$(find ${HOSTS_DIR}${host}/.${POOL_TYPE}/snapshot -maxdepth 1 -mindepth 1 | sort | head -n 1)
+        SNAP=$(find ${HOSTS_DIR}${host}/.${POOL_TYPE}/snapshot -maxdepth 1 -mindepth 1 | sort -r | head -n 1)
 	if [ "${POOL_TYPE}" == "btrfs" ]; then
             LATEST=$(basename "$SNAP" 2> /dev/null | cut -c 2-17)
         elif [ "${POOL_TYPE}" == "zfs" ]; then
