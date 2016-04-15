@@ -12,9 +12,13 @@ CWD="$(dirname $0)/"
 # Source Functions
 . ${CWD}functions.sh;
 
-HOSTS_DIR="/${POOL_NAME}/hosts/"
+if [ ${HACK88} == '1' ]; then
+    HOSTS_DIR="${MOUNT_POINT}/h/"
+else
+    HOSTS_DIR="${MOUNT_POINT}/hosts/"
+fi
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//).pid"
-LOGFILE="/${POOL_NAME}/logs/backup.log"
+LOGFILE="${MOUNT_POINT}/logs/backup.log"
 DRYRUN=
 FORCE=
 
@@ -91,9 +95,9 @@ for HOST in $HOSTS; do
                     logMessage 1 $LOGFILE "Info: Removing snapshot ${snapshot}."
                     SNAPSHOT=$(basename $snapshot)
                     if [ -n "$DRYRUN" ] ; then
-                        echo $DRYRUN destroy ${POOL_NAME}/hosts/${HOST} ${SNAPSHOT}
+                        echo $DRYRUN destroy ${POOL_NAME}/${HOSTS_DIR}/${HOST} ${SNAPSHOT}
                     else
-                        storageDelete $POOL_TYPE ${POOL_NAME}/hosts/${HOST} ${SNAPSHOT}
+                        storageDelete $POOL_TYPE ${POOL_NAME}/${HOSTS_DIR}/${HOST} ${SNAPSHOT}
                     fi
                 fi
             fi
