@@ -10,9 +10,13 @@ CWD="$(dirname $0)/"
 # Source Functions
 . ${CWD}functions.sh;
 
-HOSTS_DIR="/${POOL_NAME}/hosts/"
+if [ ${HACK88} == '1' ]; then
+    HOSTS_DIR="${MOUNT_POINT}/h/"
+else
+    HOSTS_DIR="${MOUNT_POINT}/hosts/"
+if
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//).pid"
-LOGFILE="/${POOL_NAME}/logs/backup.log"
+LOGFILE="${MOUNT_POINT}/logs/backup.log"
 
 if [ ! $(whoami) = "root" ]; then
     echo "Error: Must run as root."

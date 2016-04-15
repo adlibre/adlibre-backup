@@ -10,7 +10,11 @@ CWD="$(dirname $0)/"
 # Source Functions
 . ${CWD}functions.sh;
 
-HOSTS_DIR="/${POOL_NAME}/hosts/"
+if [ ${HACK88} == '1' ]; then
+    HOSTS_DIR="${MOUNT_POINT}/h/"
+else
+    HOSTS_DIR="${MOUNT_POINT}/hosts/"
+fi
 DRYRUN=
 FORCE=
 
@@ -102,6 +106,7 @@ echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
 STARTTIME=$(date +%s)
 
 RSYNC_CMD="${RSYNC_BIN} ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${RSYNC_HOST-${HOST}}${RSYNC_BACKUP_PATHS} ${HOSTS_DIR}${HOST}/d/"
+
 logMessage 1 $LOGFILE "Running: $RSYNC_CMD"
 CMD=$(eval $RSYNC_CMD 2>&1;)
 RSYNC_RETVAL=$?
@@ -112,12 +117,25 @@ if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
 
     # Create snapshot    
     if [ "$RSYNC_RETVAL" = "0" ]; then
-        SNAP_NAME="@$(date +"%F-%X-%s")"
+        SNAP_NAME="$(date +"%F-%X-%s")"
     else
-        SNAP_NAME="@$(date +"%F-%X-%s")-partial"
+        SNAP_NAME="$(date +"%F-%X-%s")-partial"
     fi    
-    storageSnapshot $POOL_TYPE $POOL_NAME/hosts/${HOST} ${SNAP_NAME}
-    SNAPSHOT_RETVAL=$?
+    # Find an unused number between 00 and 99 for the snapshot
+    for SNAP_NUMBER in `seq -w 0 99`; do
+        ls ${HOSTS_DIR}${HOST}/.zfs/snapshot |grep -xq ${SNAP_NUMBER} || break
+    done
+    echo "SNAP_NAME=${SNAP_NAME}">${HOSTS_DIR}/${HOST}/l/snap_data
+    echo "SNAP_NUMBER=${SNAP_NUMBER}">>${HOSTS_DIR}/${HOST}/l/snap_data
+    if [ "$HACK88" == "1" ]; then
+        logMessage 1 $LOGFILE "fixin to do: storageSnapshot ${POOL_TYPE} ${POOL_NAME}/h/${HOST} @${SNAP_NUMBER}"
+        storageSnapshot ${POOL_TYPE} ${POOL_NAME}/h/${HOST} @${SNAP_NUMBER}
+        SNAPSHOT_RETVAL=$?
+    else
+        logMessage 1 $LOGFILE "fixin to do: storageSnapshot ${POOL_TYPE} ${POOL_NAME}/hosts/${HOST} @${SNAP_NAME}"
+        storageSnapshot ${POOL_TYPE} ${POOL_NAME}/hosts/${HOST} @${SNAP_NAME}
+        SNAPSHOT_RETVAL=$?
+    fi
     
     if [ "$RSYNC_RETVAL" = "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ]; then
         if [ "$NSCA_ENABLED" == "true" ]; then

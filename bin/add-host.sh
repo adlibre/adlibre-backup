@@ -18,19 +18,28 @@ if [ ! $HOST ]; then
 fi
 
 # Create hosts subvolume
-if [ ! -d "/${POOL_NAME}/hosts/" ]; then
-    storageCreate $POOL_TYPE ${POOL_NAME}/hosts
+if [ ${HACK88} == '1' ]; then
+    HOSTS_DIR='h'
+    if [ ! -d "${MOUNT_POINT}/h/" ]; then
+        storageCreate $POOL_TYPE ${POOL_NAME}/h
+        ln -s ${MOUNT_POINT}/h ${MOUNT_POINT}/hosts
+    fi
+else
+    HOSTS_DIR='hosts'
+    if [ ! -d "${MOUNT_POINT}/hosts/" ]; then
+        storageCreate $POOL_TYPE ${POOL_NAME}/hosts
+    fi
 fi
 
 # Create host subvolume
-if [ ! -d "/${POOL_NAME}/hosts/${HOST}" ]; then
-    storageCreate $POOL_TYPE ${POOL_NAME}/hosts/${HOST}
-    mkdir /${POOL_NAME}/hosts/${HOST}/c
-    mkdir /${POOL_NAME}/hosts/${HOST}/d
-    mkdir /${POOL_NAME}/hosts/${HOST}/l
-    cp /${POOL_NAME}/etc/host_default.conf /${POOL_NAME}/hosts/${HOST}/c/backup.conf
+if [ ! -d "/${MOUNT_POINT}/${HOSTS_DIR}/${HOST}" ]; then
+    storageCreate $POOL_TYPE ${POOL_NAME}/${HOSTS_DIR}/${HOST}
+    mkdir ${MOUNT_POINT}/${HOSTS_DIR}/${HOST}/c
+    mkdir ${MOUNT_POINT}/${HOSTS_DIR}/${HOST}/d
+    mkdir ${MOUNT_POINT}/${HOSTS_DIR}/${HOST}/l
+    cp ${MOUNT_POINT}/etc/host_default.conf ${MOUNT_POINT}/${HOSTS_DIR}/${HOST}/c/backup.conf
     if [ "${POOL_TYPE}" == "btrfs" ]; then 
-        mkdir -p /${POOL_NAME}/hosts/${HOST}/.btrfs/snapshot
+        mkdir -p ${MOUNT_POINT}/hosts/${HOST}/.btrfs/snapshot
     fi
 else
     echo "Error: Host already exists."

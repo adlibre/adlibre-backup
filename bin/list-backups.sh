@@ -10,7 +10,11 @@ CWD="$(dirname $0)/"
 # Source Functions
 . ${CWD}functions.sh;
 
-HOSTS_DIR="/${POOL_NAME}/hosts/"
+if [ ${HACK88} == '1' ]; then
+    HOSTS_DIR="${MOUNT_POINT}/h/"
+else
+    HOSTS_DIR="${MOUNT_POINT}/hosts/"
+fi
 
 if [ ! $(whoami) = "root" ]; then
     echo "Error: Must run as root."
@@ -34,7 +38,12 @@ for host in $HOSTS; do
             SNAPSHOT=$(basename $snapshot)
             EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
             ANNOTATION=$(cat $snapshot/c/ANNOTATION 2> /dev/null)
-            echo "$host $SNAPSHOT $EXPIRY \"$ANNOTATION\""
+            if [ "$HACK88" == "1" ]; then
+                . ${HOSTS_DIR}${host}/.zfs/snapshot/$SNAPSHOT/l/snap_data
+                echo "$host ${SNAPSHOT}:${SNAP_NAME} $EXPIRY \"$ANNOTATION\""
+            else
+                echo "$host $SNAPSHOT $EXPIRY \"$ANNOTATION\""
+            fi
         done
     fi
 done
