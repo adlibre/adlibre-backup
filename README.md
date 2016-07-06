@@ -157,8 +157,8 @@ To find a particular snapshot:
 eg:
 
     backup-host# ./bin/list-backups.sh example.com
-    example.com 2012-10-25-23:35:19-1351168519 1352377190 "first backup"
-    example.com 2012-11-04-15:40:49-1352004049 1354418267 "before acme software upgrade"
+    example.com 2012-10-25-23:35:19-1351168519 1352377190 successful "first backup"
+    example.com 2012-11-04-15:40:49-1352004049 1354418267 successful "before acme software upgrade"
 
 The files are stored plainly within the ZFS snapshot:
 

@@ -13,8 +13,8 @@ CWD="$(dirname $0)/"
 HOST=$1
 
 if [ ! $HOST ]; then
-	echo "Please specify host name as the first argument."
-	exit
+    echo "Please specify host name as the first argument."
+    exit
 fi
 
 # Create hosts subvolume
