@@ -5,7 +5,7 @@
 CWD="$(dirname $0)/"
 
 # Source Config
-. ${CWD}../etc/backup.confgit 
+. ${CWD}../etc/backup.conf 
 
 # Source Functions
 . ${CWD}functions.sh;
