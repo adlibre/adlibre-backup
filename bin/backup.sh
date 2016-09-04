@@ -114,15 +114,11 @@ fi
 # Do backup
 (
 rm -f ${LOGFILE} # delete logfile from host dir before we begin.
-<<<<<<< HEAD
+echo "inprogress" > $STATUSFILE
 rm -f ${HOSTS_DIR}${HOST}/c/EXPIRY
 if [ "${EXPIRY}" -gt "0" ]; then
 	echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
 fi
-=======
-echo "inprogress" > $STATUSFILE
-echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
->>>>>>> upstream/master
 echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
 
 STARTTIME=$(date +%s)
