@@ -32,7 +32,7 @@ while test $# -gt 0; do
         FORCE=true
         shift
         ;;
-    --)	# Stop option processing.
+    --) # Stop option processing.
         shift; break
         ;;
     -*)
@@ -49,6 +49,7 @@ HOST=$1
 ANNOTATION=${2-none}
 LOCKFILE="/var/run/$(basename $0 | sed s/\.sh//)-${HOST}.pid"
 LOGFILE="${HOSTS_DIR}${HOST}/l/backup.log"
+STATUSFILE="${HOSTS_DIR}${HOST}/l/STATUS"
 
 if [ ! ${HOST} ]; then
     echo "Usage: backup.sh [--dry-run | -n ] [ --force | -f ] <hostname> <annotation> <expiry-in-days>."
@@ -90,11 +91,19 @@ fi
 # Check to see if the host backup is disabled.
 if [ "${DISABLED}" == "true" ] && [ -z "$FORCE" ];  then
     logMessage 1 $LOGFILE "Info: ${HOST} backup disabled by config."
+    echo "disabled" > $STATUSFILE
     exit 0
 fi
 
 # expand excludes (with support for strings with escaped spaces)
 eval "for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do RSYNC_EXCLUDES=\"\$RSYNC_EXCLUDES --exclude='\${e}'\"; done"
+
+# Generate rsync compatible backup path arguments
+for P in $BACKUP_PATHS; do
+   [ "${#P}" -ne "1" ] && P=${P%/}  # Remove trailing /
+   P=":${P} "  # Add :
+   RSYNC_BACKUP_PATHS="${RSYNC_BACKUP_PATHS}${P}"
+done
 
 # FIXME. Refactor do backup so we can properly handly dry-run
 if [ -n "$DRYRUN" ] ; then
@@ -105,14 +114,20 @@ fi
 # Do backup
 (
 rm -f ${LOGFILE} # delete logfile from host dir before we begin.
+<<<<<<< HEAD
 rm -f ${HOSTS_DIR}${HOST}/c/EXPIRY
 if [ "${EXPIRY}" -gt "0" ]; then
 	echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
 fi
+=======
+echo "inprogress" > $STATUSFILE
+echo $EXPIRY > ${HOSTS_DIR}${HOST}/c/EXPIRY
+>>>>>>> upstream/master
 echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
 
 STARTTIME=$(date +%s)
-RSYNC_CMD="${RSYNC_BIN} ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${HOST}:'$BACKUP_PATHS' ${HOSTS_DIR}${HOST}/d/"
+
+RSYNC_CMD="${RSYNC_BIN} ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${RSYNC_HOST-${HOST}}${RSYNC_BACKUP_PATHS} ${HOSTS_DIR}${HOST}/d/"
 logMessage 1 $LOGFILE "Running: $RSYNC_CMD"
 CMD=$(eval $RSYNC_CMD 2>&1;)
 RSYNC_RETVAL=$?
@@ -121,11 +136,13 @@ RUNTIME=$(expr ${STOPTIME} - ${STARTTIME})
 
 if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
 
-    # Create snapshot    
+    # Create snapshot
     if [ "$RSYNC_RETVAL" = "0" ]; then
         SNAP_NAME="@$(date +"%F-%X-%s")"
+        echo "successful" > $STATUSFILE
     else
         SNAP_NAME="@$(date +"%F-%X-%s")-partial"
+        echo "partial" > $STATUSFILE
     fi    
     storageSnapshot $POOL_TYPE $POOL_NAME/hosts/${HOST} ${SNAP_NAME}
     SNAPSHOT_RETVAL=$?
@@ -157,6 +174,7 @@ else
         raiseAlert "${ANNOTATION}" 2 "Backup Failed: ${CMD}." ${HOST}
     fi
     logMessage 3 $LOGFILE "Backup Failed: ${CMD}. Rsync exited with ${RSYNC_RETVAL}."
+    echo "failed" > $STATUSFILE
     exit 99
 fi
 

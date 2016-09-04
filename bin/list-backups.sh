@@ -34,7 +34,8 @@ for host in $HOSTS; do
             SNAPSHOT=$(basename $snapshot)
             EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
             ANNOTATION=$(cat $snapshot/c/ANNOTATION 2> /dev/null)
-            echo "$host $SNAPSHOT ${EXPIRY:-0} \"$ANNOTATION\""
+            STATUS=$(cat $snapshot/l/STATUS 2> /dev/null)
+            echo "$host $SNAPSHOT ${EXPIRY:-0} $STATUS \"$ANNOTATION\""
         done
     fi
 done

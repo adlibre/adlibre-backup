@@ -40,7 +40,7 @@ while test $# -gt 0; do
         FORCE=true
         shift
         ;;
-    --)	# Stop option processing.
+    --) # Stop option processing.
         shift; break
         ;;
     -*)
@@ -76,8 +76,8 @@ for HOST in $HOSTS; do
     # Check to see if the host prune is disabled.
     if [ "${PRUNE}" == "false" ] && [ -z "$FORCE" ];  then
         logMessage 1 $LOGFILE "Info: ${HOST} prune disabled by config."
-        PRUNE=true		# reset for the next pass through
-	continue
+        PRUNE=true      # reset for the next pass through
+        continue
     else
         logMessage 1 $LOGFILE "Info: Pruning snapshots for ${HOST}."
     fi

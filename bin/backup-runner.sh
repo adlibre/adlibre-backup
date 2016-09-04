@@ -69,9 +69,9 @@ for host in $HOSTS; do
     ${CWD}backup.sh ${host} "${ANNOTATION}"
     if [ "$?" = "0" ]; then
         logMessage 1 $LOGFILE "Info: Completed backup of ${host}" 
-	else
-		logMessage 3 $LOGFILE "Error: Backup of ${host} encountered an error"
-	fi
+    else
+        logMessage 3 $LOGFILE "Error: Backup of ${host} encountered an error"
+    fi
 done
 
 exit 0
