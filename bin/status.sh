@@ -33,12 +33,14 @@ for host in $HOSTS; do
     STATUS=$(cat $backup/l/STATUS 2> /dev/null)
     if [ -d ${HOSTS_DIR}${host}/.${POOL_TYPE}/snapshot ]; then
         SNAP=$(find ${HOSTS_DIR}${host}/.${POOL_TYPE}/snapshot -maxdepth 1 -mindepth 1 | sort -r | head -n 1)
-	if [ "${POOL_TYPE}" == "btrfs" ]; then
-            LATEST=$(basename "$SNAP" 2> /dev/null | cut -c 2-17)
-        elif [ "${POOL_TYPE}" == "zfs" ]; then
-            LATEST=$(basename "$SNAP" 2> /dev/null | cut -c 1-16)
+        if [ "$SNAP" != "" ]; then
+  	        if [ "${POOL_TYPE}" == "btrfs" ]; then
+                LATEST=$(basename "$SNAP" 2> /dev/null | cut -c 2-17)
+            elif [ "${POOL_TYPE}" == "zfs" ]; then
+                LATEST=$(basename "$SNAP" 2> /dev/null | cut -c 1-16)
+            fi
+          SIZE=$(du -hs "$SNAP" | awk '{ print $1 }')
         fi
-        SIZE=$(du -hs "$SNAP" | awk '{ print $1 }')
     fi
     echo "$host $STATUS ${LATEST:-none} ${SIZE:-0} \"$ANNOTATION\""
 done
