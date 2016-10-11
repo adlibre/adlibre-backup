@@ -26,7 +26,7 @@ while test $# -gt 0; do
         DRYRUN="Dry run:"
         LOGFILE=/dev/stderr
         shift
-        ;;    
+        ;;
     --force | -f)
         echo "Forcing backup."
         FORCE=true
@@ -117,13 +117,16 @@ if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
     if [ "$RSYNC_RETVAL" = "0" ]; then
         SNAP_NAME="@$(date +"%F-%X-%s")"
         echo "successful" > $STATUSFILE
+    elif [ "$RSYNC_RETVAL" = "23" ] || [ "$RSYNC_RETVAL" = "24" ]; then
+      SNAP_NAME="@$(date +"%F-%X-%s")-partial"
+      echo "partial" > $STATUSFILE
     else
-        SNAP_NAME="@$(date +"%F-%X-%s")-partial"
-        echo "partial" > $STATUSFILE
-    fi    
+        SNAP_NAME="@$(date +"%F-%X-%s")-failed"
+        echo "failed" > $STATUSFILE
+    fi
     storageSnapshot $POOL_TYPE $POOL_NAME/hosts/${HOST} ${SNAP_NAME}
     SNAPSHOT_RETVAL=$?
-    
+
     if [ "$RSYNC_RETVAL" = "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ]; then
         if [ "$NSCA_ENABLED" == "true" ]; then
             raiseAlert "backup ${HOST}" 0 "Backup Successful. Runtime ${RUNTIME} seconds."
