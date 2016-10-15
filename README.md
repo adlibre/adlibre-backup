@@ -174,6 +174,41 @@ Just dive in and copy the files out of the snapshot:
     cd /backup/hosts/example.com/.zfs/snapshot/ && \
     rsync -aH --numeric-ids 2012-11-04-15:40:49-1352004049/d/ example.com:/restore-point/
 
+
+## Retention Policies
+
+Each backup has a TTL defined, after which the prune script will delete the 
+backup's snapshot. You can configure the retention/expiry of backups through 
+various configuration properties. Each of them defines the TTL by means of "fully days after 
+backup creation". A value of 0 defines "keep forever".
+
+Once a backup is created you can't change the TTL anymore, as it is stored 
+within the read-only snapshot.
+
+A specific expiry TTL given as last parameter to the backup script 
+overrules any of the other TTL configuration.
+
+The default TTL configuration is set in the required property ``EXPIRY``. It gets
+applied when none of the other option matches.
+
+All other options apply until to the first complete/successful backup at a given day:
+
+* ``EXPIRY_DAY``: TTL for daily backups
+* ``EXPIRY_WEEK``: TTL for the backup on a Monday
+* ``EXPIRY_MONTH``: TTL for backup on the first day of a month
+* ``EXPIRY_QUARTER``: TTL for backup on the first day of a quarter
+* ``EXPIRY_YEAR``: TTL: for backup on the first day of a year
+
+If a given day matches multiple conditions, the expiry configuration for the longest 
+period that has a non-empty value gets selected. E.g when on January 1st ``EXPIRY_YEAR`` 
+is not set, but ``EXPIRY_QUARTER`` and ``EXPIRY_DAY`` are, then 
+EXPRIY_QUARTER gets selected.
+
+When a backup doesn't succeed completely (partial backups), then the configured TTL 
+gets also applied to the next attempt to do a backup at the same day. If all backups 
+at a given day (partially) fail, then you won't get a backup with the special TTL. 
+You then would have to trigger a manual backup with a TTL set explicitly.
+
 ## Status
 
 This has been in production use for many years now and is stable.

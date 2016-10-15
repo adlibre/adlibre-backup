@@ -5,7 +5,7 @@
 CWD="$(dirname $0)/"
 
 # Source Config
-. ${CWD}../etc/backup.conf
+. ${CWD}../etc/backup.conf 
 
 # Source Functions
 . ${CWD}functions.sh;
@@ -35,7 +35,7 @@ for host in $HOSTS; do
             EXPIRY=$(cat $snapshot/c/EXPIRY 2> /dev/null)
             ANNOTATION=$(cat $snapshot/c/ANNOTATION 2> /dev/null)
             STATUS=$(cat $snapshot/l/STATUS 2> /dev/null)
-            echo "$host $SNAPSHOT $EXPIRY $STATUS \"$ANNOTATION\""
+            echo "$host $SNAPSHOT ${EXPIRY:-0} $STATUS \"$ANNOTATION\""
         done
     fi
 done
