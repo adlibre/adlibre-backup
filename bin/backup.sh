@@ -79,8 +79,17 @@ if [ "${DISABLED}" == "true" ] && [ -z "$FORCE" ];  then
     exit 0
 fi
 
+# disable shell globbing to properly handle rsync patterns
+set -f
+
 # expand excludes (with support for strings with escaped spaces)
 eval "for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do RSYNC_EXCLUDES=\"\$RSYNC_EXCLUDES --exclude='\${e}'\"; done"
+
+# expand includes (with support for strings with escaped spaces)
+eval "for i in $INCLUDE $INCLUDE_ADDITIONAL; do RSYNC_INCLUDES=\"\$RSYNC_INCLUDES --exclude='\${i}'\"; done"
+
+# enable shell globbing
+set +f
 
 # Generate rsync compatible backup path arguments
 for P in $BACKUP_PATHS; do
@@ -104,7 +113,7 @@ echo $ANNOTATION > ${HOSTS_DIR}${HOST}/c/ANNOTATION
 
 STARTTIME=$(date +%s)
 
-RSYNC_CMD="${RSYNC_BIN} ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_EXCLUDES} ${SSH_USER}@${RSYNC_HOST-${HOST}}${RSYNC_BACKUP_PATHS} ${HOSTS_DIR}${HOST}/d/"
+RSYNC_CMD="${RSYNC_BIN} ${RSYNC_ARGS} ${RSYNC_ADDITIONAL_ARGS} ${RSYNC_INCLUDES} ${RSYNC_EXCLUDES} ${SSH_USER}@${RSYNC_HOST-${HOST}}${RSYNC_BACKUP_PATHS} ${HOSTS_DIR}${HOST}/d/"
 logMessage 1 $LOGFILE "Running: $RSYNC_CMD"
 CMD=$(eval $RSYNC_CMD 2>&1;)
 RSYNC_RETVAL=$?
