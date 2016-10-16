@@ -86,7 +86,7 @@ set -f
 eval "for e in $EXCLUDE $EXCLUDE_ADDITIONAL; do RSYNC_EXCLUDES=\"\$RSYNC_EXCLUDES --exclude='\${e}'\"; done"
 
 # expand includes (with support for strings with escaped spaces)
-eval "for i in $INCLUDE $INCLUDE_ADDITIONAL; do RSYNC_INCLUDES=\"\$RSYNC_INCLUDES --exclude='\${i}'\"; done"
+eval "for i in $INCLUDE $INCLUDE_ADDITIONAL; do RSYNC_INCLUDES=\"\$RSYNC_INCLUDES --include='\${i}'\"; done"
 
 # enable shell globbing
 set +f
