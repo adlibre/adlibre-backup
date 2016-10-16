@@ -61,7 +61,7 @@ An operating system with BTRFS or ZFS support is required (eg
 and a dedicated storage pool.
 
 Check out the source code into the root of your backup pool and review
-``./conf/backup.conf``. Modify as necessary to set your pool and filesystem 
+``./conf/backup.conf``. Modify as necessary to set your pool and filesystem
 options.
 
 ### Red Hat / CentOS / EL Installation and ZFS Usage Example
@@ -76,19 +76,19 @@ Install Adlibre Backup into root of _backup_ zpool.
 
     yum -y install git
     cd /backup && git clone git://github.com/adlibre/adlibre-backup.git .
-    
+
 Install NSCA Client (optional) for Nagios / Icinga integration
 
     yum -y install nsca-client
 
 Generate SSH Key, this is used for authentication.
 
-    ssh-keygen -t dsa -N "" -f ~root/.ssh/id_dsa
-    
+    ssh-keygen -t rsa -N "" -f ~root/.ssh/id_rsa
+
 Add _server.example.com_ host config and copy the SSH Key to host example.com
 
     cd /backup && ./bin/add-host.sh example.com
-    
+
 Now run the backup
 
     ./bin/backup-runner.sh --all
@@ -168,11 +168,17 @@ The files are stored plainly within the ZFS snapshot:
     dr-xr-xr-x  4 root  wheel     4B Oct 16 20:18 ..
     drwxr-xr-x  5 root  wheel     5B Oct 16 20:18 2012-10-25-23:35:19-1351168519
     drwxr-xr-x  5 root  wheel     5B Oct 16 20:18 2012-11-04-15:40:49-1352004049
-    
+
 Just dive in and copy the files out of the snapshot:
-    
+
     cd /backup/hosts/example.com/.zfs/snapshot/ && \
     rsync -aH --numeric-ids 2012-11-04-15:40:49-1352004049/d/ example.com:/restore-point/
+
+## Upgrading
+
+Upgrading is just a matter of updating the code and merging in any local changes
+to the default configuration. If you're using git to deploy the code then
+`git pull` is usually sufficient.
 
 ## Status
 
