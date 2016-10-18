@@ -126,12 +126,15 @@ if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
     if [ "$RSYNC_RETVAL" = "0" ]; then
         SNAP_NAME="@$(date +"%F-%X-%s")"
         echo "successful" > $STATUSFILE
+        logMessage 1 $LOGFILE "Backup successful: ${CMD}. Rsync exited with ${RSYNC_RETVAL}"
     elif [ "$RSYNC_RETVAL" = "23" ] || [ "$RSYNC_RETVAL" = "24" ]; then
-      SNAP_NAME="@$(date +"%F-%X-%s")-partial"
-      echo "partial" > $STATUSFILE
+        SNAP_NAME="@$(date +"%F-%X-%s")-partial"
+        echo "partial" > $STATUSFILE
+        logMessage 2 $LOGFILE "Partial Backup: ${CMD}. Rsync exited with ${RSYNC_RETVAL}"
     else
         SNAP_NAME="@$(date +"%F-%X-%s")-failed"
         echo "failed" > $STATUSFILE
+        logMessage 3 $LOGFILE "Backup failed: ${CMD}. Rsync exited with ${RSYNC_RETVAL}"
     fi
     storageSnapshot $POOL_TYPE $POOL_NAME/hosts/${HOST} ${SNAP_NAME}
     SNAPSHOT_RETVAL=$?
@@ -154,7 +157,6 @@ if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
             raiseAlert "backup ${HOST}" 1 "Backup Failed: ${CMD}. Snapshotted anyway."
             raiseAlert "${ANNOTATION}" 1 "Backup Failed: ${CMD}. Snapshotted anyway." ${HOST}
         fi
-        logMessage 3 $LOGFILE "Backup Error: ${CMD}. Rsync exited with ${RSYNC_RETVAL}. Snapshotted anyway."
         exit 99
     fi
 else
