@@ -38,4 +38,4 @@ else
 fi
 
 # Try to copy ssh-key to host
-ssh-copy-id -i ${SSH_KEY} ${HOST}
+ssh-copy-id -i ${SSH_KEY} ${SSH_USER}@${HOST}
