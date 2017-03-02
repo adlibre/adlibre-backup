@@ -18,4 +18,4 @@ if [ ! ${HOST} ]; then
     exit 99
 fi
 
-raiseAlert "${ANNOTATION}" 0 "Test Message" ${HOST}
+${CWD}monitor.sh "${ANNOTATION}" 0 "Test Message" ${HOST}

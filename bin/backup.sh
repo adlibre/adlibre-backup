@@ -140,29 +140,29 @@ if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
     SNAPSHOT_RETVAL=$?
 
     if [ "$RSYNC_RETVAL" = "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ]; then
-        if [ "$NSCA_ENABLED" == "true" ]; then
-            raiseAlert "backup ${HOST}" 0 "Backup Successful. Runtime ${RUNTIME} seconds."
-            raiseAlert "${ANNOTATION}" 0 "Backup Successful. Runtime ${RUNTIME} seconds." ${HOST}
+        if [ "$MONITOR_ENABLED" == "true" ]; then
+            ${CWD}monitor.sh "backup ${HOST}" 0 "Backup Successful. Runtime ${RUNTIME} seconds."
+            ${CWD}monitor.sh "${ANNOTATION}" 0 "Backup Successful. Runtime ${RUNTIME} seconds." ${HOST}
         fi
         logMessage 1 $LOGFILE "Backup Successful. Runtime ${RUNTIME} seconds."
     elif [ "$RSYNC_RETVAL" = "0" ] && [ "$SNAPSHOT_RETVAL" != "0" ]; then
-        if [ "$NSCA_ENABLED" == "true" ]; then
-            raiseAlert "backup ${HOST}" 2 "Backup succeeded, but Snapshot Failed"
+        if [ "$MONITOR_ENABLED" == "true" ]; then
+            ${CWD}monitor.sh "backup ${HOST}" 2 "Backup succeeded, but Snapshot Failed"
         fi
         logMessage 3 $LOGFILE "Backup succeeded, but snapshot ${SNAP_NAME} Failed"
         exit 99
     elif [ "$RSYNC_RETVAL" != "0" ] && [ "$SNAPSHOT_RETVAL" = "0" ] && [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
-        if [ "$NSCA_ENABLED" == "true" ]; then
-            # Downgrade rsync failure error to nagios warning (because SNAPSHOT_ON_ERROR=true)
-            raiseAlert "backup ${HOST}" 1 "Backup Failed: ${CMD}. Snapshotted anyway."
-            raiseAlert "${ANNOTATION}" 1 "Backup Failed: ${CMD}. Snapshotted anyway." ${HOST}
+        if [ "$MONITOR_ENABLED" == "true" ]; then
+            # Downgrade rsync failure error to warning (1) (because SNAPSHOT_ON_ERROR=true)
+            ${CWD}monitor.sh "backup ${HOST}" 1 "Backup Failed: ${CMD}. Snapshotted anyway."
+            ${CWD}monitor.sh "${ANNOTATION}" 1 "Backup Failed: ${CMD}. Snapshotted anyway." ${HOST}
         fi
         exit 99
     fi
 else
-    if [ "$NSCA_ENABLED" == "true" ]; then
-        raiseAlert "backup ${HOST}" 2 "Backup Failed: ${CMD}."
-        raiseAlert "${ANNOTATION}" 2 "Backup Failed: ${CMD}." ${HOST}
+    if [ "$MONITOR_ENABLED" == "true" ]; then
+        ${CWD}monitor.sh "backup ${HOST}" 2 "Backup Failed: ${CMD}."
+        ${CWD}monitor.sh "${ANNOTATION}" 2 "Backup Failed: ${CMD}." ${HOST}
     fi
     logMessage 3 $LOGFILE "Backup Failed: ${CMD}. Rsync exited with ${RSYNC_RETVAL}."
     echo "failed" > $STATUSFILE
