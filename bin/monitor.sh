@@ -17,10 +17,6 @@ CWD="$(dirname $0)/"
 : ${NSCA_PORT:='5667'}
 : ${4:=$(hostname)}
 
-# Tests
-[ -z "$NSCA_SERVER" ] && die "NSCA_SERVER not set" || true
-command -v $NSCA_BIN > /dev/null || echo "Warning: send_nsca not found. Please specify \$NSCA_BIN location in backup.conf."
-
 function die() {
     echo "Error: $1"
     exit 128
@@ -31,6 +27,10 @@ function usage() {
    echo "Usage: $0 <service-name> <return-code> <message> <optional hostname>"
    exit 1
 }
+
+# Tests
+[ -z "$NSCA_SERVER" ] && die "NSCA_SERVER not set" || true
+command -v $NSCA_BIN > /dev/null || die "send_nsca not found. Please specify \$NSCA_BIN location in backup.conf."
 
 function raiseAlert () {
     # $1 - Service name that has been set up on nsca server
