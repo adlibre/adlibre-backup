@@ -44,7 +44,8 @@ and compression
 * Uses [Rsync](http://en.wikipedia.org/wiki/Rsync) and
 [SSH](http://en.wikipedia.org/wiki/OpenSSH) for transport
 * Integration with monitoring tools such as Nagios or Icinga using NSCA passive
-checks.
+checks. Or easily integrate your own monitoring system by configuring a
+ `MONITOR_HANDLER` script.
 * Centralised configuration and management - all configuration and scheduling is
 done on the backup server
 * Ad hoc annotated backups - allows for ad hoc backups with an explanation as to
@@ -56,15 +57,17 @@ when or why the backup was taken and per backup retention periods
 
 ## Installation
 
-An operating system with BTRFS or ZFS support is required (eg
+High level installation is as follows:
+
+1. An operating system with BTRFS or ZFS support is required (eg
 [FreeBSD](http://www.freebsd.org) or [ZFS on Linux](http://zfsonlinux.org/))
 and a dedicated storage pool.
 
-Check out the source code into the root of your backup pool and review
-``./conf/backup.conf``. Modify as necessary to set your pool and filesystem
-options.
+2. Check out the source code into the root of your `/backup` pool storage device
+and review ``./conf/backup.conf``. Modify as necessary to set your pool and
+filesystem options.
 
-### Red Hat / CentOS / EL Installation and ZFS Usage Example
+### Detailed: Red Hat / CentOS / EL Installation and ZFS Usage Example
 
 Create _backup_ zpool with dedup and compression.
 
@@ -179,6 +182,11 @@ Just dive in and copy the files out of the snapshot:
 Upgrading is just a matter of updating the code and merging in any local changes
 to the default configuration. If you're using git to deploy the code then
 `git pull` is usually sufficient.
+
+However from time to time options and features do sometimes change. Please review
+any changes to the defaults in `etc/backup.conf`.
+
+The on disk pool format is stable and no changes are required to support upgrades.
 
 ## Status
 

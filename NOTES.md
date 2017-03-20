@@ -35,7 +35,8 @@ or as frequently as required for the backup interval.
 
 ## Snapshot / rotation
 
-Snapshots are performed immediately after a successful backup run.
+Snapshots are performed immediately after a successful backup run, or optionally
+when `SNAPSHOT_ON_ERROR=true`.
 
 Snapshot deletion is done in a separate process independently of the backup
 processes (_bin/prune.sh_).
@@ -53,13 +54,13 @@ as backups occur.
 
 ## ZFS Commands (cheat sheet)
 
-    # setup backup zpool, set compression, set dedupe and inherit on backup/hosts 
+    # setup backup zpool, set compression, set dedupe and inherit on backup/hosts
     # zfs create backup/hosts
     # zfs set compression=gzip backup
     # zfs set dedup=on backup
     # zfs inherit -r compression backup/hosts
     # zfs inherit -r dedup backup/hosts
-    
+
     # zfs create backup/hosts/example.com
     # zfs snapshot backup/hosts/example.com@foo
     # zfs destroy backup/hosts/example.com@foo
