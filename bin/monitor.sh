@@ -15,7 +15,7 @@ CWD="$(dirname $0)/"
 : ${NSCA_BIN:='/usr/sbin/send_nsca'}
 : ${NSCA_CFG:='/etc/nagios/send_nsca.cfg'}
 : ${NSCA_PORT:='5667'}
-: ${4:=$(hostname)}
+: ${HOSTNAME:=${4:-$(hostname)}}
 
 function die() {
     echo "Error: $1"
@@ -46,4 +46,4 @@ function raiseAlert () {
     fi
 }
 
-raiseAlert "$1" "$2" "$3" "$4"
+raiseAlert "$1" "$2" "$3" "$HOSTNAME"
