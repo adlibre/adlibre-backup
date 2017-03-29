@@ -15,7 +15,7 @@ CWD="$(dirname $0)/"
 : ${NSCA_BIN:='/usr/sbin/send_nsca'}
 : ${NSCA_CFG:='/etc/nagios/send_nsca.cfg'}
 : ${NSCA_PORT:='5667'}
-: ${HOSTNAME:=${4:-$(hostname)}}
+: ${HOST:=${4:-$(hostname)}}
 
 function die() {
     echo "Error: $1"
@@ -31,6 +31,7 @@ function usage() {
 # Tests
 [ -z "$NSCA_SERVER" ] && die "NSCA_SERVER not set" || true
 command -v $NSCA_BIN > /dev/null || die "send_nsca not found. Please specify \$NSCA_BIN location in backup.conf."
+[ $# -eq 0 ] && usage
 
 function raiseAlert () {
     # $1 - Service name that has been set up on nsca server
@@ -46,4 +47,4 @@ function raiseAlert () {
     fi
 }
 
-raiseAlert "$1" "$2" "$3" "$HOSTNAME"
+raiseAlert "$1" "$2" "$3" "$HOST"
