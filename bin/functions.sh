@@ -13,7 +13,7 @@ logMessage () {
     # $1 = Error level
     # $2 = logpath
     # $3 = message
-    DATE=$(date +"%F %R")
+    DATE=$(date +"%F %T")
     if [ "$1" -ge "$LOG_LEVEL" ]; then
         echo "$DATE $3" >> ${2}
         if [ "$ECHO_LOG" -eq "1" ]; then
