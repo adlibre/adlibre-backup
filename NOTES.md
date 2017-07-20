@@ -4,8 +4,8 @@ Development notes for the current Bourne shell implementation.
 
 ## Architecture
 
-* Bourne shell - fast prototyping. Later versions will be written in Python.
-* Cron is used for scheduling daily runs, and executing rotations (ala Rsnapshot)
+* Bourne shell - fast prototyping.
+* Cron is used for scheduling daily runs, and executing snapshot prune operations
 * Most scripts perform a single operation on a single host backup
 * 'Runner' scripts perform global operations across multiple host backups
 
