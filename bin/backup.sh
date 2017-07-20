@@ -125,15 +125,15 @@ if [ "$RSYNC_RETVAL" = "0" ] || [ "${SNAPSHOT_ON_ERROR}" == "true" ]; then
 
     # Create snapshot
     if [ "$RSYNC_RETVAL" = "0" ]; then
-        SNAP_NAME="@$(date +"%F-%X-%s")"
+        SNAP_NAME="@$(date +"%F-%R-%s")"
         echo "successful" > $STATUSFILE
         logMessage 1 $LOGFILE "Backup successful: ${CMD}. Rsync exited with ${RSYNC_RETVAL}"
     elif [ "$RSYNC_RETVAL" = "23" ] || [ "$RSYNC_RETVAL" = "24" ]; then
-        SNAP_NAME="@$(date +"%F-%X-%s")-partial"
+        SNAP_NAME="@$(date +"%F-%R-%s")-partial"
         echo "partial" > $STATUSFILE
         logMessage 2 $LOGFILE "Partial Backup: ${CMD}. Rsync exited with ${RSYNC_RETVAL}"
     else
-        SNAP_NAME="@$(date +"%F-%X-%s")-failed"
+        SNAP_NAME="@$(date +"%F-%R-%s")-failed"
         echo "failed" > $STATUSFILE
         logMessage 3 $LOGFILE "Backup failed: ${CMD}. Rsync exited with ${RSYNC_RETVAL}"
     fi
