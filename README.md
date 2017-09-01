@@ -148,6 +148,20 @@ or multiple hosts
 
 ``./bin/backup-runner.sh <hostname> <hostname>...``
 
+### Running scheduled backups with flexible retention
+You can configure cron jobs to run regular backups with flexible retentions.
+
+The following example keeps daily backups for 2 weeks, weekly backups for 6 months and monthly backups for a year.
+
+```
+# daily backups, kept for 2 weeks
+00 2 2-31 * * test $(date +\%u) != 7 && /backup/bin/backup-runner.sh --all --comment "Daily backup" --expiry 14 && /backup/bin/prune.sh --all
+# weekly backups, kept for 6 months
+00 2 2-31 * * test $(date +\%u) = 7 && /backup/bin/backup-runner.sh --all --comment "Weekly backup" --expiry 180 && /backup/bin/prune.sh --all
+# monthly backups, kept for a year
+00 2 1 * * /backup/bin/backup-runner.sh --all --comment "Monthly backup" --expiry 365 && /backup/bin/prune.sh --all
+```
+
 ### Restoring (ZFS)
 
 All backups are stored on disk in plain sight. To restore all you need to do
