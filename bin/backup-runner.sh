@@ -50,6 +50,7 @@ while true; do
     case "$1" in
         -a | --all ) HOSTS=$(ls ${HOSTS_DIR}); shift ;;
         -c | --comment ) ANNOTATION=$2; shift 2 ;;
+        -e | --expiry ) EXPIRY=$2; shift 2 ;;
         -h | --help ) showUsage; exit 128 ;;
         -- ) shift; break ;;
         * ) if [ ! "$1" == "" ]; then HOSTS="$HOSTS $*"; fi; shift; break ;;
@@ -66,7 +67,7 @@ logMessage 1 $LOGFILE "Info: Begin backup run of hosts $(echo ${HOSTS})"
 
 for host in $HOSTS; do
     logMessage 1 $LOGFILE "Info: Begining backup of ${host}" 
-    ${CWD}backup.sh ${host} "${ANNOTATION}"
+    ${CWD}backup.sh ${host} "${ANNOTATION}" ${EXPIRY}
     if [ "$?" = "0" ]; then
         logMessage 1 $LOGFILE "Info: Completed backup of ${host}" 
     else
