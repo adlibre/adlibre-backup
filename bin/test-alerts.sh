@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Adlibre Backup - Test NSCA Alerts
+# Adlibre Backup - Test Alert Handler
 
 CWD="$(dirname $0)/"
 

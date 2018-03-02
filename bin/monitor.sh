@@ -3,8 +3,8 @@
 # Adlibre Backup - monitor
 
 # Sends process status information to Nagios / Icinga using NSCA passive check
-# Replace this with your own monitor script to integrate with any third party
-# monitoring system.
+# Specify MONITOR_HANDLER to replace this with your own monitor script
+# to integrate with any third party monitoring system.
 
 CWD="$(dirname $0)/"
 
