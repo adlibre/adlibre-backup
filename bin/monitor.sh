@@ -40,8 +40,8 @@ function raiseAlert () {
     # $4 - Optional hostname
     # <host_name>,<svc_description>,<return_code>,<plugin_output>
     if [ -f ${NSCA_BIN} ]; then
-        echo "${4},$1,$2,$3" | ${NSCA_BIN} -H ${NSCA_SERVER} \
-        -p ${NSCA_PORT} -d "," -c ${NSCA_CFG} > /dev/null;
+        echo -e "${4}\t${1}\t${2}\t${3}" | ${NSCA_BIN} -H ${NSCA_SERVER} \
+        -p ${NSCA_PORT} -c ${NSCA_CFG} > /dev/null;
     else
         die "NSCA Plugin not found.";
     fi
