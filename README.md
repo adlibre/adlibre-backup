@@ -6,7 +6,9 @@ operating systems.
 Designed with system administrators in mind.
 
 Utilises native BTRFS / ZFS filesystem features for seamless compression,
-deduplication and snapshoting of the backup pool.
+deduplication and snapshotting of the backup pool (subject to filesystem support).
+
+Supports BTRFS, ZFS and [S3QL](https://github.com/s3ql/s3ql) filesystems.
 
 #### The problem
 
@@ -22,8 +24,8 @@ adding and removing hosts.
 Our solution is centralised and agentless, so there is nothing to consume
 resources on your hosts, and all configuration is managed on the backup server.
 
-Utilises BTRFS / ZFS native filesystem snapshots, and per host
-filesystems for better performance, scalability and ease of management.
+Uses native filesystem snapshot capability, and per host
+subvolumes for better performance, scalability and ease of management.
 
 Backups can be run at anytime, with custom expiry and a short message so you
 know why the backup was taken.

@@ -56,6 +56,9 @@ storageCreate() {
         zfs)
             zfs create ${2}
             ;;
+        s3ql)
+            mkdir /${2}
+            ;;
         *)
             echo "Warning: POOL_TYPE unknown."
             break
@@ -78,6 +81,11 @@ storageSnapshot() {
         zfs)
             zfs snapshot ${2}${3}
             ;;
+        s3ql)
+            mkdir -p /${2}/.s3ql/snapshot
+            s3qlcp /${2} /${2}/.s3ql/snapshot/${3}
+            s3qlctrl flushcache /${POOL_NAME}
+            ;;
         *)
             echo "Warning: POOL_TYPE unknown."
             break
@@ -99,6 +107,10 @@ storageDelete() {
             ;;
         zfs)
             zfs destroy ${2}@${3}
+            ;;
+        s3ql)
+            s3qlrm /${2}/.s3ql/snapshot/${3}
+            s3qlctrl flushcache /${POOL_NAME}
             ;;
         *)
             echo "Warning: POOL_TYPE unknown."
